@@ -62,4 +62,12 @@ export const uiExtendTheme = (theme) => ({
 export const uiShortcuts = [
   ...typographyShortcuts,
   ...semanticShortcuts,
+  {
+    'wizard-content-container': 'w-full max-w-[var(--wizard-shell-max-width)] mx-auto px-[var(--wizard-content-gutter)]',
+    'wizard-header-container': 'w-full max-w-[var(--wizard-shell-max-width)] mx-auto px-[var(--wizard-header-gutter)]',
+    'wizard-section-padding': 'py-[var(--space-4xl)]',
+    'wizard-surface-card': 'bg-surface-l1 border border-neutral-muted rounded-[var(--radius-md)] shadow-[var(--shadow-card)]',
+    'wizard-divider': 'border-0 border-t border-solid divider-default',
+    'wizard-focus-ring': 'focus-visible:outline focus-visible:outline-[length:var(--focus-ring-width)] focus-visible:outline-offset-[var(--focus-ring-offset)] focus-visible:outline-[var(--border-brand-emphasis)]',
+  },
 ]

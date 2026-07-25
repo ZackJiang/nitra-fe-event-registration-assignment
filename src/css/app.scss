@@ -1,2 +1,22 @@
+@import '@fontsource-variable/inter';
 @import 'src/css/colors.scss';
+@import 'src/css/design-tokens.scss';
 @import 'src/css/typography.scss';
+
+html,
+body,
+#q-app {
+  min-height: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--bg-surface-l0);
+  color: var(--text-neutral-default);
+  font-family: var(--font-family-sans);
+  font-weight: 485;
+}
+
+* {
+  box-sizing: border-box;
+}

@@ -1,0 +1,47 @@
+:root {
+  --font-family-sans: 'Inter Variable', 'Inter', sans-serif;
+
+  --space-2xs: 4px;
+  --space-xs: 6px;
+  --space-sm: 8px;
+  --space-control: 10px;
+  --space-md: 12px;
+  --space-lg: 16px;
+  --space-xl: 20px;
+  --space-2xl: 24px;
+  --space-3xl: 32px;
+  --space-4xl: 40px;
+  --space-5xl: 48px;
+  --space-6xl: 60px;
+
+  --radius-md: 6px;
+  --radius-lg: 8px;
+  --radius-control: 10px;
+  --radius-full: 9999px;
+
+  --shadow-card: 0 4px 16px rgb(0 0 0 / 8%), 0 1px 3px rgb(0 0 0 / 4%);
+  --focus-ring-width: 2px;
+  --focus-ring-offset: 2px;
+
+  --wizard-shell-max-width: 1440px;
+  --wizard-content-max-width: 1200px;
+  --wizard-header-height: 72px;
+  --wizard-stepper-height: 80px;
+  --wizard-action-height: 72px;
+  --wizard-header-gutter: 48px;
+  --wizard-content-gutter: 120px;
+}
+
+@media (max-width: 1023px) {
+  :root {
+    --wizard-header-gutter: 32px;
+    --wizard-content-gutter: 32px;
+  }
+}
+
+@media (max-width: 767px) {
+  :root {
+    --wizard-header-gutter: 16px;
+    --wizard-content-gutter: 16px;
+  }
+}
