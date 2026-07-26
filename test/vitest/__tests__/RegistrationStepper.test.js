@@ -1,6 +1,6 @@
 import { mount } from '@vue/test-utils'
 import { describe, expect, it } from 'vitest'
-import RegistrationStepper from '../../../src/components/registration/RegistrationStepper.vue'
+import RegistrationStepper from '../../../src/components/registration/shell/RegistrationStepper.vue'
 
 function mountStepper(props = {}) {
   return mount(RegistrationStepper, {

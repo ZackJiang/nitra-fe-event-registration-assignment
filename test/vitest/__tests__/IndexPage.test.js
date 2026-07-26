@@ -42,6 +42,49 @@ describe('IndexPage registration state integration', () => {
     expect(wrapper.get('#attendee-fullName').element.value).toBe('Ada Lovelace')
   })
 
+  it('preserves session selections across dates and navigation', async () => {
+    const wrapper = mount(IndexPage)
+
+    await wrapper.get('.registration-action-bar__primary').trigger('click')
+    await wrapper.get('[data-session-id="s3"]').trigger('click')
+    await wrapper.findAll('.q-tab')[1].trigger('click')
+    await wrapper.get('[data-session-id="s8"]').trigger('click')
+
+    expect(wrapper.get('.session-step__count').text()).toBe('2 sessions selected')
+
+    await wrapper.get('.registration-action-bar__primary').trigger('click')
+    await wrapper.get('.registration-action-bar__back').trigger('click')
+
+    expect(wrapper.get('[data-session-id="s3"]').classes()).toContain('session-card--selected')
+    await wrapper.findAll('.q-tab')[1].trigger('click')
+    expect(wrapper.get('[data-session-id="s8"]').classes()).toContain('session-card--selected')
+  })
+
+  it('shows deferred session conflicts after submit and clears them after correction', async () => {
+    const wrapper = mount(IndexPage, {
+      attachTo: document.body,
+    })
+
+    await wrapper.get('.registration-action-bar__primary').trigger('click')
+    await wrapper.get('[data-session-id="s4"]').trigger('click')
+    await wrapper.get('[data-session-id="s5"]').trigger('click')
+    await wrapper.get('.registration-action-bar__primary').trigger('click')
+    await wrapper.get('.registration-action-bar__primary').trigger('click')
+    await wrapper.get('.registration-action-bar__primary').trigger('click')
+    await wrapper.get('.registration-action-bar__back').trigger('click')
+    await wrapper.get('.registration-action-bar__back').trigger('click')
+
+    expect(wrapper.findAll('.session-card--error')).toHaveLength(2)
+    expect(wrapper.get('[role="alert"]').text()).toBe('Selected sessions have overlapping times.')
+    expect(document.activeElement).toBe(wrapper.get('[data-session-id="s4"] .q-checkbox').element)
+
+    await wrapper.get('[data-session-id="s4"]').trigger('click')
+
+    expect(wrapper.find('.session-card--error').exists()).toBe(false)
+    expect(wrapper.find('[role="alert"]').exists()).toBe(false)
+    wrapper.unmount()
+  })
+
   it('shows deferred errors and focuses ticket selection after returning to Step 1', async () => {
     const wrapper = mount(IndexPage, {
       attachTo: document.body,

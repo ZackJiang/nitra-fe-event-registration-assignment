@@ -1,0 +1,186 @@
+<script setup>
+import { computed, ref } from 'vue'
+import { getSessionTrackTone } from '../../../constants/sessions.js'
+import {
+  formatUtcTimeRange,
+  getCapacityUtilization,
+  getRemainingCapacity,
+} from '../../../utils/registrationSchedule.js'
+
+const props = defineProps({
+  session: {
+    type: Object,
+    required: true,
+  },
+  selected: {
+    type: Boolean,
+    default: false,
+  },
+  soldOut: {
+    type: Boolean,
+    default: false,
+  },
+  hasError: {
+    type: Boolean,
+    default: false,
+  },
+  errorMessageId: {
+    type: String,
+    default: undefined,
+  },
+})
+
+const emit = defineEmits({
+  toggle: (sessionId) => typeof sessionId === 'string',
+})
+
+const checkboxRef = ref(null)
+
+const isInteractive = computed(() => !props.soldOut || props.selected)
+const trackTone = computed(() => getSessionTrackTone(props.session.track))
+const trackLabel = computed(() => String(props.session.track ?? 'main').toUpperCase())
+const speakerLine = computed(() => (
+  [props.session.speaker, props.session.speakerTitle].filter(Boolean).join(', ')
+))
+const timeRange = computed(() => (
+  formatUtcTimeRange(props.session.date, props.session.endDate)
+))
+const utilization = computed(() => (
+  getCapacityUtilization(props.session.capacity, props.session.registered)
+))
+const remainingSpots = computed(() => (
+  getRemainingCapacity(props.session.capacity, props.session.registered)
+))
+const capacityTone = computed(() => {
+  if (props.soldOut) {
+    return 'danger'
+  }
+
+  if (utilization.value >= 0.75) {
+    return 'accent'
+  }
+
+  if (utilization.value >= 0.5) {
+    return 'warning'
+  }
+
+  return 'brand'
+})
+const capacityLabel = computed(() => {
+  if (props.soldOut) {
+    return 'Sold Out'
+  }
+
+  return `${remainingSpots.value} ${remainingSpots.value === 1 ? 'spot' : 'spots'} left`
+})
+const accessibleLabel = computed(() => {
+  const selectionAction = props.selected ? 'Deselect' : 'Select'
+  return `${selectionAction} ${props.session.title}. ${capacityLabel.value}.`
+})
+
+function toggleSession() {
+  if (isInteractive.value) {
+    emit('toggle', props.session.id)
+  }
+}
+
+function handleCardClick(event) {
+  if (event.target.closest('.q-checkbox')) {
+    return
+  }
+
+  toggleSession()
+}
+
+function focus() {
+  const checkboxElement = checkboxRef.value?.$el
+
+  if (focusableElement(checkboxElement)) {
+    checkboxElement.focus()
+    return true
+  }
+
+  return false
+}
+
+/**
+ * @param {unknown} element
+ * @returns {element is HTMLElement}
+ */
+function focusableElement(element) {
+  return element instanceof HTMLElement && typeof element.focus === 'function'
+}
+
+defineExpose({
+  focus,
+})
+</script>
+
+<template>
+  <q-card
+    class="session-card"
+    :class="{
+      'session-card--selected': selected,
+      'session-card--sold-out': soldOut && !selected,
+      'session-card--error': hasError,
+    }"
+    :aria-disabled="!isInteractive ? 'true' : undefined"
+    :data-session-id="session.id"
+    @click="handleCardClick"
+  >
+    <div class="session-card__top">
+      <q-badge
+        class="session-card__track"
+        :class="`session-card__track--${trackTone}`"
+        rounded
+        :label="trackLabel"
+      />
+
+      <q-checkbox
+        ref="checkboxRef"
+        class="session-card__checkbox"
+        dense
+        keep-color
+        color="primary"
+        size="16px"
+        :model-value="selected"
+        :disable="!isInteractive"
+        :aria-label="accessibleLabel"
+        :aria-invalid="hasError ? 'true' : undefined"
+        :aria-describedby="hasError ? errorMessageId : undefined"
+        @click.stop
+        @update:model-value="toggleSession"
+      />
+    </div>
+
+    <h2 class="session-card__title">
+      {{ session.title }}
+    </h2>
+
+    <p class="session-card__speaker">
+      {{ speakerLine }}
+    </p>
+
+    <p class="session-card__time">
+      {{ timeRange }}
+    </p>
+
+    <q-linear-progress
+      class="session-card__capacity"
+      :class="`session-card__capacity--${capacityTone}`"
+      rounded
+      size="6px"
+      :value="utilization"
+      :aria-label="`${capacityLabel}, ${Math.round(utilization * 100)}% capacity used`"
+    />
+
+    <p
+      class="session-card__capacity-label"
+      :class="`session-card__capacity-label--${capacityTone}`"
+    >
+      {{ capacityLabel }}
+    </p>
+  </q-card>
+</template>
+
+<style scoped src="./SessionCard.css"></style>

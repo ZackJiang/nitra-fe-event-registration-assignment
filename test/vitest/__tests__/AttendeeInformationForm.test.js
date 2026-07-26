@@ -1,6 +1,6 @@
 import { mount } from '@vue/test-utils'
 import { describe, expect, it } from 'vitest'
-import AttendeeInformationForm from '../../../src/components/registration/AttendeeInformationForm.vue'
+import AttendeeInformationForm from '../../../src/components/registration/attendee/AttendeeInformationForm.vue'
 
 function createProps(overrides = {}) {
   return {

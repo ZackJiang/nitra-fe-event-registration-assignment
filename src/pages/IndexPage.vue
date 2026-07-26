@@ -1,8 +1,9 @@
 <script setup>
 import { computed } from 'vue'
-import RegistrationActionBar from '../components/registration/RegistrationActionBar.vue'
-import RegistrationStepOne from '../components/registration/RegistrationStepOne.vue'
-import RegistrationWizardShell from '../components/registration/RegistrationWizardShell.vue'
+import AttendeeStep from '../components/registration/attendee/AttendeeStep.vue'
+import SessionStep from '../components/registration/sessions/SessionStep.vue'
+import RegistrationActionBar from '../components/registration/shell/RegistrationActionBar.vue'
+import RegistrationWizardShell from '../components/registration/shell/RegistrationWizardShell.vue'
 import { useRegistrationWizard } from '../composables/useRegistrationWizard.js'
 import { WIZARD_STEPS } from '../constants/wizard.js'
 import { event } from '../mocks/event.js'
@@ -12,13 +13,16 @@ const {
   attendee,
   errorStepIds,
   goToStep,
+  groupedSessions,
   hasSelectedMerchandise,
   isSubmitDisabled,
   nextStep,
   previousStep,
   selectTicket,
+  selectedSessionIds,
   submit,
   ticketTypeId,
+  toggleSession,
   visibleValidationIssues,
 } = useRegistrationWizard()
 
@@ -50,7 +54,7 @@ function handlePrimaryAction() {
     :error-step-ids="errorStepIds"
     @step-request="goToStep"
   >
-    <registration-step-one
+    <attendee-step
       v-if="currentStep === 1"
       v-model:ticket-type-id="ticketTypeModel"
       v-model:full-name="attendee.fullName"
@@ -62,6 +66,14 @@ function handlePrimaryAction() {
       :ticket-types="event.ticketTypes"
       :visible-issues="visibleValidationIssues"
       :shipping-required="hasSelectedMerchandise"
+    />
+
+    <session-step
+      v-else-if="currentStep === 2"
+      :grouped-sessions="groupedSessions"
+      :selected-session-ids="selectedSessionIds"
+      :visible-issues="visibleValidationIssues"
+      @toggle-session="toggleSession"
     />
 
     <template #actions>

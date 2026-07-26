@@ -1,6 +1,6 @@
 <script setup>
 import { computed } from 'vue'
-import { isWizardStepId, WIZARD_STEPS } from '../../constants/wizard.js'
+import { isWizardStepId, WIZARD_STEPS } from '../../../constants/wizard.js'
 
 const props = defineProps({
   steps: {

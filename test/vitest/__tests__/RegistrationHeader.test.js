@@ -1,6 +1,6 @@
 import { mount } from '@vue/test-utils'
 import { describe, expect, it } from 'vitest'
-import RegistrationHeader from '../../../src/components/registration/RegistrationHeader.vue'
+import RegistrationHeader from '../../../src/components/registration/shell/RegistrationHeader.vue'
 
 describe('RegistrationHeader', () => {
   it('renders the event name and decorative exported emblem assets', () => {

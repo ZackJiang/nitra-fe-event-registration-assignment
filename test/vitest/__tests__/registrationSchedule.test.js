@@ -4,6 +4,7 @@ import {
   findScheduleConflicts,
   formatUtcDate,
   formatUtcTimeRange,
+  getCapacityUtilization,
   getRemainingCapacity,
   groupItemsByUtcDate,
   isAtCapacity,
@@ -71,6 +72,12 @@ describe('registration schedule utilities', () => {
     expect(getRemainingCapacity(10, 3)).toBe(7)
     expect(getRemainingCapacity(10, 12)).toBe(0)
     expect(getRemainingCapacity(undefined, undefined)).toBe(0)
+    expect(getCapacityUtilization(10, 0)).toBe(0)
+    expect(getCapacityUtilization(10, 5)).toBe(0.5)
+    expect(getCapacityUtilization(10, 12)).toBe(1)
+    expect(getCapacityUtilization(0, 0)).toBe(1)
+    expect(getCapacityUtilization(-1, 0)).toBe(0)
+    expect(getCapacityUtilization(undefined, undefined)).toBe(0)
     expect(isAtCapacity(10, 10)).toBe(true)
     expect(isAtCapacity(10, 11)).toBe(true)
     expect(isAtCapacity(undefined, undefined)).toBe(false)

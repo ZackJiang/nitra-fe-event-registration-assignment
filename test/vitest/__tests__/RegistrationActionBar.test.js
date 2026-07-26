@@ -1,6 +1,6 @@
 import { mount } from '@vue/test-utils'
 import { describe, expect, it } from 'vitest'
-import RegistrationActionBar from '../../../src/components/registration/RegistrationActionBar.vue'
+import RegistrationActionBar from '../../../src/components/registration/shell/RegistrationActionBar.vue'
 
 describe('RegistrationActionBar', () => {
   it('shows only the primary action by default and emits its event', async () => {

@@ -1,6 +1,6 @@
 import { mount } from '@vue/test-utils'
 import { describe, expect, it } from 'vitest'
-import RegistrationWizardShell from '../../../src/components/registration/RegistrationWizardShell.vue'
+import RegistrationWizardShell from '../../../src/components/registration/shell/RegistrationWizardShell.vue'
 
 describe('RegistrationWizardShell', () => {
   it('renders content and action slots inside the shared Quasar layout', () => {

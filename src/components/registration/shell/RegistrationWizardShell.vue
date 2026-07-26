@@ -1,7 +1,7 @@
 <script setup>
 import RegistrationHeader from './RegistrationHeader.vue'
 import RegistrationStepper from './RegistrationStepper.vue'
-import { isWizardStepId } from '../../constants/wizard.js'
+import { isWizardStepId } from '../../../constants/wizard.js'
 
 defineProps({
   eventName: {

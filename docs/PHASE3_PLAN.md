@@ -36,7 +36,7 @@
 
 ## 元件介面
 
-- `RegistrationStepOne`
+- `AttendeeStep`
   - Props：`ticketTypes`、`visibleIssues`、`shippingRequired`
   - Models：`ticketTypeId` 與六個 attendee string fields
   - 負責 section 組合、issue mapping 及首次錯誤聚焦。

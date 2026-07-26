@@ -90,7 +90,7 @@ defineExpose({
 </script>
 
 <template>
-  <div class="registration-step-one">
+  <div class="attendee-step">
     <ticket-selection
       ref="ticketSelectionRef"
       v-model="ticketTypeId"
@@ -113,7 +113,7 @@ defineExpose({
 </template>
 
 <style scoped>
-.registration-step-one {
+.attendee-step {
   display: flex;
   width: 100%;
   flex-direction: column;

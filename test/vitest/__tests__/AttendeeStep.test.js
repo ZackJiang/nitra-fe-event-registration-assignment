@@ -1,7 +1,7 @@
 import { mount } from '@vue/test-utils'
 import { nextTick } from 'vue'
 import { describe, expect, it } from 'vitest'
-import RegistrationStepOne from '../../../src/components/registration/RegistrationStepOne.vue'
+import AttendeeStep from '../../../src/components/registration/attendee/AttendeeStep.vue'
 import { event } from '../../../src/mocks/event.js'
 
 function createProps(overrides = {}) {
@@ -18,9 +18,9 @@ function createProps(overrides = {}) {
   }
 }
 
-describe('RegistrationStepOne', () => {
+describe('AttendeeStep', () => {
   it('maps visible issues to ticket and attendee controls', () => {
-    const wrapper = mount(RegistrationStepOne, {
+    const wrapper = mount(AttendeeStep, {
       attachTo: document.body,
       props: createProps({
         visibleIssues: [
@@ -48,7 +48,7 @@ describe('RegistrationStepOne', () => {
   })
 
   it('focuses the ticket group before attendee fields in DOM order', async () => {
-    const wrapper = mount(RegistrationStepOne, {
+    const wrapper = mount(AttendeeStep, {
       attachTo: document.body,
       props: createProps({
         visibleIssues: [
@@ -76,7 +76,7 @@ describe('RegistrationStepOne', () => {
   })
 
   it('focuses the first invalid attendee field when ticket is valid', async () => {
-    const wrapper = mount(RegistrationStepOne, {
+    const wrapper = mount(AttendeeStep, {
       attachTo: document.body,
       props: createProps({
         ticketTypeId: 'general',

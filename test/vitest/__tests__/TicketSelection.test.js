@@ -1,6 +1,6 @@
 import { mount } from '@vue/test-utils'
 import { describe, expect, it } from 'vitest'
-import TicketSelection from '../../../src/components/registration/TicketSelection.vue'
+import TicketSelection from '../../../src/components/registration/attendee/TicketSelection.vue'
 import { event } from '../../../src/mocks/event.js'
 
 describe('TicketSelection', () => {

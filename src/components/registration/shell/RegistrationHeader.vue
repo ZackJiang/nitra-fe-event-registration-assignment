@@ -1,7 +1,7 @@
 <script setup>
-import emblemBottomLeftUrl from '../../assets/brand/nitra-emblem-bottom-left.svg'
-import emblemCenterUrl from '../../assets/brand/nitra-emblem-center.svg'
-import emblemTopRightUrl from '../../assets/brand/nitra-emblem-top-right.svg'
+import emblemBottomLeftUrl from '../../../assets/brand/nitra-emblem-bottom-left.svg'
+import emblemCenterUrl from '../../../assets/brand/nitra-emblem-center.svg'
+import emblemTopRightUrl from '../../../assets/brand/nitra-emblem-top-right.svg'
 
 defineProps({
   eventName: {

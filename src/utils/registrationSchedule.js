@@ -110,6 +110,26 @@ export function getRemainingCapacity(capacity, registered) {
 }
 
 /**
+ * Calculate capacity utilization as a value between zero and one.
+ * A zero-capacity session is treated as fully utilized.
+ *
+ * @param {unknown} capacity
+ * @param {unknown} registered
+ * @returns {number}
+ */
+export function getCapacityUtilization(capacity, registered) {
+  if (!isNonNegativeNumber(capacity) || !isNonNegativeNumber(registered)) {
+    return 0
+  }
+
+  if (capacity === 0) {
+    return 1
+  }
+
+  return Math.min(registered / capacity, 1)
+}
+
+/**
  * Determine whether registration has reached capacity.
  *
  * @param {unknown} capacity
