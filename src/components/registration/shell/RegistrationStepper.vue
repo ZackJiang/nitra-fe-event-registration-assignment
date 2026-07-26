@@ -153,6 +153,11 @@ function requestStep(stepId) {
   background: var(--bg-brand-emphasis-rest);
 }
 
+/* The active dot closes the connector coming from the completed step. */
+.registration-stepper :deep(.q-stepper__tab--active .q-stepper__dot::before) {
+  background: var(--bg-brand-emphasis-rest);
+}
+
 .registration-stepper :deep(.q-stepper__step-inner) {
   padding: 0;
 }

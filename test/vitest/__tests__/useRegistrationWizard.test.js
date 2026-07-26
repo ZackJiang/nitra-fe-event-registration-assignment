@@ -66,6 +66,16 @@ describe('useRegistrationWizard', () => {
     blockedWizard.toggleSession('s11')
 
     expect(blockedWizard.setAddonQuantity('ws1', 1)).toBe(false)
+    expect(blockedWizard.addonAvailabilityById.value.ws1).toEqual({
+      isSoldOut: false,
+      conflictingSessionIds: ['s11'],
+      isUnavailableForNewSelection: true,
+    })
+    expect(blockedWizard.addonAvailabilityById.value.ws2).toEqual({
+      isSoldOut: true,
+      conflictingSessionIds: [],
+      isUnavailableForNewSelection: true,
+    })
 
     const preservedWizard = useRegistrationWizard()
     expect(preservedWizard.setAddonQuantity('ws1', 1)).toBe(true)
@@ -77,6 +87,26 @@ describe('useRegistrationWizard', () => {
     expect(preservedWizard.validationIssues.value).toEqual(expect.arrayContaining([
       expect.objectContaining({ code: 'addon.workshopConflict' }),
     ]))
+    expect(preservedWizard.setAddonQuantity('ws1', 0)).toBe(true)
+    expect(preservedWizard.addonSelections.ws1.quantity).toBe(0)
+  })
+
+  it('groups add-ons by the configured display order', () => {
+    const wizard = useRegistrationWizard()
+
+    expect(Object.keys(wizard.groupedAddons.value)).toEqual([
+      'workshop',
+      'meal',
+      'merchandise',
+    ])
+    expect(wizard.groupedAddons.value.workshop.map((addon) => addon.id)).toEqual(['ws1', 'ws2'])
+    expect(wizard.groupedAddons.value.meal.map((addon) => addon.id)).toEqual(['meal1', 'meal2'])
+    expect(wizard.groupedAddons.value.merchandise.map((addon) => addon.id)).toEqual([
+      'merch1',
+      'merch2',
+      'merch3',
+      'merch4',
+    ])
   })
 
   it('enforces merchandise quantity and size rules', () => {

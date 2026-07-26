@@ -1,4 +1,5 @@
 import { computed, reactive, ref } from 'vue'
+import { ADDON_CATEGORY_IDS } from '../constants/addons.js'
 import { isWizardStepId, WIZARD_STEPS } from '../constants/wizard.js'
 import { addons } from '../mocks/addons.js'
 import { event } from '../mocks/event.js'
@@ -123,10 +124,38 @@ export function useRegistrationWizard({
     }]
   }))
 
+  const groupedAddons = computed(() => Object.fromEntries(
+    ADDON_CATEGORY_IDS.map((categoryId) => [
+      categoryId,
+      normalizedAddons.filter((addon) => addon.category === categoryId),
+    ]),
+  ))
+
   const groupedSessions = computed(() => groupItemsByUtcDate(normalizedSessions))
 
   const hasSelectedMerchandiseValue = computed(() => (
     hasSelectedMerchandise(addonSelections, normalizedAddons)
+  ))
+
+  const addonAvailabilityById = computed(() => Object.fromEntries(
+    normalizedAddons.map((addon) => {
+      const isWorkshop = addon.category === 'workshop'
+      const conflictingSessionIds = isWorkshop
+        ? selectedSessions.value
+            .filter((session) => hasScheduleConflict(addon, [session]))
+            .map((session) => session.id)
+        : []
+      const isSoldOut = isWorkshop && isAtCapacity(addon.capacity, addon.registered)
+
+      return [
+        addon.id,
+        {
+          isSoldOut,
+          conflictingSessionIds,
+          isUnavailableForNewSelection: isSoldOut || conflictingSessionIds.length > 0,
+        },
+      ]
+    }),
   ))
 
   const scheduleConflicts = computed(() => {
@@ -387,8 +416,10 @@ export function useRegistrationWizard({
     selectedTicket,
     selectedSessions,
     selectedAddons,
+    groupedAddons,
     groupedSessions,
     hasSelectedMerchandise: hasSelectedMerchandiseValue,
+    addonAvailabilityById,
     scheduleConflicts,
     pricingBreakdown,
     validationIssues,

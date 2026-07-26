@@ -1,0 +1,109 @@
+.addon-step,
+.addon-step__options,
+.addon-step__list {
+  display: flex;
+  width: 100%;
+}
+
+.addon-step {
+  align-items: flex-start;
+  gap: var(--space-3xl);
+}
+
+.addon-step__options,
+.addon-step__list {
+  min-width: 0;
+  flex-direction: column;
+}
+
+.addon-step__options {
+  flex: 1 1 788px;
+  gap: var(--space-2xl);
+}
+
+.addon-step__list {
+  gap: var(--space-2xl);
+}
+
+.addon-step__heading,
+.addon-step__empty {
+  margin: 0;
+}
+
+.addon-step__shipping-banner {
+  width: 100%;
+  padding: var(--space-lg);
+  border: 1px solid var(--border-info-opacity);
+  border-radius: var(--radius-lg);
+  background: var(--bg-info-subtle-rest);
+  color: var(--text-neutral-default);
+  font-size: 14px;
+  line-height: 20px;
+}
+
+.addon-step__shipping-banner :deep(.q-banner__avatar) {
+  min-width: 20px;
+  color: var(--text-info-default);
+}
+
+.addon-step__shipping-banner strong,
+.addon-step__shipping-banner span {
+  display: block;
+}
+
+.addon-step__shipping-banner strong {
+  margin-bottom: var(--space-2xs);
+  font-weight: 610;
+}
+
+.addon-step__heading {
+  font-size: var(--font-size-h3);
+  font-weight: 630;
+  line-height: var(--line-height-h3);
+}
+
+.addon-step__tabs {
+  min-height: 40px;
+  max-width: 100%;
+  align-self: flex-start;
+  padding: var(--space-2xs);
+  border-radius: var(--radius-control);
+  background: var(--bg-surface-l2);
+}
+
+.addon-step__tab {
+  min-height: 32px;
+  padding: 0 var(--space-xl);
+  border-radius: var(--radius-lg);
+  color: var(--text-neutral-muted);
+  font-size: 13px;
+  font-weight: 570;
+}
+
+.addon-step__tab--active {
+  background: var(--bg-brand-emphasis-rest);
+  color: var(--text-inverse-default);
+  font-weight: 610;
+}
+
+.addon-step__empty {
+  color: var(--text-neutral-muted);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-sm);
+}
+
+@media (max-width: 1023px) {
+  .addon-step {
+    flex-direction: column;
+  }
+
+  .addon-step__options {
+    flex-basis: auto;
+  }
+}
+
+@media (max-width: 767px) {
+  .addon-step__tabs {
+    width: 100%;
+  }
+}

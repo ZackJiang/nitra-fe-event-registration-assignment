@@ -60,6 +60,63 @@ describe('IndexPage registration state integration', () => {
     expect(wrapper.get('[data-session-id="s8"]').classes()).toContain('session-card--selected')
   })
 
+  it('keeps merchandise selections and the live order summary across navigation', async () => {
+    const wrapper = mount(IndexPage)
+
+    await wrapper.get('.registration-action-bar__primary').trigger('click')
+    await wrapper.get('.registration-action-bar__primary').trigger('click')
+    await wrapper.findAll('.q-tab')[2].trigger('click')
+    await wrapper.get('[aria-label="Increase Conference T-Shirt quantity"]').trigger('click')
+
+    expect(wrapper.text()).toContain('Shipping Information')
+    expect(wrapper.get('.order-summary').text()).toContain('Conference T-Shirt × 1')
+    expect(wrapper.get('.order-summary').text()).toContain('$35.00')
+
+    await wrapper.get('.registration-action-bar__back').trigger('click')
+    await wrapper.get('.registration-action-bar__primary').trigger('click')
+    await wrapper.findAll('.q-tab')[2].trigger('click')
+
+    expect(wrapper.get('[data-addon-id="merch1"]').classes()).toContain(
+      'merchandise-card--selected',
+    )
+  })
+
+  it('blocks a workshop that conflicts with a selected session', async () => {
+    const wrapper = mount(IndexPage)
+
+    await wrapper.get('.registration-action-bar__primary').trigger('click')
+    await wrapper.findAll('.q-tab')[1].trigger('click')
+    await wrapper.get('[data-session-id="s11"]').trigger('click')
+    await wrapper.get('.registration-action-bar__primary').trigger('click')
+
+    const workshopCard = wrapper.get('[data-addon-id="ws1"]')
+    expect(workshopCard.classes()).toContain('addon-card--unavailable')
+    expect(workshopCard.text()).toContain('Unavailable — conflicts with a selected session.')
+
+    await workshopCard.trigger('click')
+    expect(workshopCard.classes()).not.toContain('addon-card--selected')
+  })
+
+  it('preserves a workshop selected before a conflict and allows removing it', async () => {
+    const wrapper = mount(IndexPage)
+
+    await wrapper.get('.registration-action-bar__primary').trigger('click')
+    await wrapper.get('.registration-action-bar__primary').trigger('click')
+    await wrapper.get('[data-addon-id="ws1"]').trigger('click')
+    await wrapper.get('.registration-action-bar__back').trigger('click')
+    await wrapper.findAll('.q-tab')[1].trigger('click')
+    await wrapper.get('[data-session-id="s11"]').trigger('click')
+    await wrapper.get('.registration-action-bar__primary').trigger('click')
+
+    const workshopCard = wrapper.get('[data-addon-id="ws1"]')
+    expect(workshopCard.classes()).toContain('addon-card--selected-conflict')
+
+    await workshopCard.trigger('click')
+    expect(wrapper.get('[data-addon-id="ws1"]').classes()).not.toContain(
+      'addon-card--selected',
+    )
+  })
+
   it('shows deferred session conflicts after submit and clears them after correction', async () => {
     const wrapper = mount(IndexPage, {
       attachTo: document.body,

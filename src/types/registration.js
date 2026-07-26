@@ -15,6 +15,17 @@
  */
 
 /**
+ * @typedef {'workshop' | 'meal' | 'merchandise'} AddonCategory
+ */
+
+/**
+ * @typedef {Object} AddonAvailability
+ * @property {boolean} isSoldOut
+ * @property {string[]} conflictingSessionIds
+ * @property {boolean} isUnavailableForNewSelection
+ */
+
+/**
  * @typedef {Object} RegistrationSubmission
  * @property {'idle' | 'succeeded'} status
  * @property {string | null} confirmationId
@@ -44,7 +55,7 @@
  * @typedef {Object} PricingLine
  * @property {string} sourceId
  * @property {string} label
- * @property {'ticket' | 'workshop' | 'meal' | 'merchandise'} category
+ * @property {'ticket' | AddonCategory} category
  * @property {number} quantity
  * @property {number} unitPriceCents
  * @property {number} lineTotalCents

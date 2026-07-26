@@ -1,5 +1,6 @@
 <script setup>
 import { computed } from 'vue'
+import AddonStep from '../components/registration/addons/AddonStep.vue'
 import AttendeeStep from '../components/registration/attendee/AttendeeStep.vue'
 import SessionStep from '../components/registration/sessions/SessionStep.vue'
 import RegistrationActionBar from '../components/registration/shell/RegistrationActionBar.vue'
@@ -10,16 +11,22 @@ import { event } from '../mocks/event.js'
 
 const {
   currentStep,
+  addonAvailabilityById,
+  addonSelections,
   attendee,
   errorStepIds,
   goToStep,
+  groupedAddons,
   groupedSessions,
   hasSelectedMerchandise,
   isSubmitDisabled,
   nextStep,
+  pricingBreakdown,
   previousStep,
   selectTicket,
   selectedSessionIds,
+  setAddonQuantity,
+  setAddonSize,
   submit,
   ticketTypeId,
   toggleSession,
@@ -74,6 +81,18 @@ function handlePrimaryAction() {
       :selected-session-ids="selectedSessionIds"
       :visible-issues="visibleValidationIssues"
       @toggle-session="toggleSession"
+    />
+
+    <addon-step
+      v-else-if="currentStep === 3"
+      :grouped-addons="groupedAddons"
+      :addon-selections="addonSelections"
+      :addon-availability-by-id="addonAvailabilityById"
+      :visible-issues="visibleValidationIssues"
+      :has-selected-merchandise="hasSelectedMerchandise"
+      :pricing-breakdown="pricingBreakdown"
+      @set-addon-quantity="setAddonQuantity"
+      @set-addon-size="setAddonSize"
     />
 
     <template #actions>
