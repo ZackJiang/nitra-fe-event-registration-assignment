@@ -19,4 +19,47 @@ describe('IndexPage registration state integration', () => {
 
     expect(wrapper.get('.q-stepper__tab--active').text()).toContain('Attendee Info')
   })
+
+  it('moves forward without validating Step 1', async () => {
+    const wrapper = mount(IndexPage)
+
+    expect(wrapper.find('[role="alert"]').exists()).toBe(false)
+    await wrapper.get('.registration-action-bar__primary').trigger('click')
+
+    expect(wrapper.get('.q-stepper__tab--active').text()).toContain('Sessions')
+    expect(wrapper.find('[role="alert"]').exists()).toBe(false)
+  })
+
+  it('preserves Step 1 values across navigation', async () => {
+    const wrapper = mount(IndexPage)
+
+    await wrapper.findAll('.q-radio')[1].trigger('click')
+    await wrapper.get('#attendee-fullName').setValue('Ada Lovelace')
+    await wrapper.get('.registration-action-bar__primary').trigger('click')
+    await wrapper.get('.registration-action-bar__back').trigger('click')
+
+    expect(wrapper.get('.ticket-card--selected').text()).toContain('VIP')
+    expect(wrapper.get('#attendee-fullName').element.value).toBe('Ada Lovelace')
+  })
+
+  it('shows deferred errors and focuses ticket selection after returning to Step 1', async () => {
+    const wrapper = mount(IndexPage, {
+      attachTo: document.body,
+    })
+
+    for (let step = 1; step < 4; step += 1) {
+      await wrapper.get('.registration-action-bar__primary').trigger('click')
+    }
+    await wrapper.get('.registration-action-bar__primary').trigger('click')
+
+    expect(wrapper.find('.q-stepper__tab--error').exists()).toBe(true)
+
+    for (let step = 4; step > 1; step -= 1) {
+      await wrapper.get('.registration-action-bar__back').trigger('click')
+    }
+
+    expect(wrapper.get('#ticket-selection-error').text()).toBe('Select a ticket type.')
+    expect(document.activeElement).toBe(wrapper.get('.q-radio').element)
+    wrapper.unmount()
+  })
 })

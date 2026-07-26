@@ -38,9 +38,9 @@ const currentStep = defineModel('currentStep', {
           @step-request="emit('step-request', $event)"
         />
 
-        <main class="registration-wizard-shell__content wizard-content-container wizard-section-padding">
+        <div class="registration-wizard-shell__content wizard-content-container wizard-section-padding">
           <slot />
-        </main>
+        </div>
 
         <slot name="actions" />
       </q-page>
