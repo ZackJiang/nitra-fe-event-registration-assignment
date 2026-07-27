@@ -198,6 +198,37 @@ describe('IndexPage registration state integration', () => {
     wrapper.unmount()
   })
 
+  it('enables Next after attendee errors are corrected while session errors remain', async () => {
+    const wrapper = mount(IndexPage)
+
+    await wrapper.get('.registration-action-bar__primary').trigger('click')
+    await wrapper.get('[data-session-id="s4"]').trigger('click')
+    await wrapper.get('[data-session-id="s5"]').trigger('click')
+    await wrapper.get('.registration-action-bar__primary').trigger('click')
+    await wrapper.get('.registration-action-bar__primary').trigger('click')
+    await wrapper.get('.registration-action-bar__primary').trigger('click')
+
+    const errorBanner = wrapper.get('[role="alert"]')
+    expect(errorBanner.text()).toContain('Step 1: Full name is required.')
+    expect(errorBanner.text()).toContain('Step 2: Selected sessions have overlapping times.')
+
+    await errorBanner.findAll('.review-error-banner__link')[0].trigger('click')
+    await wrapper.get('#attendee-fullName').setValue('Ada Lovelace')
+    await wrapper.get('#attendee-email').setValue('ada@example.com')
+    await wrapper.get('#attendee-phone').setValue('+1 (415) 555-0123')
+    await wrapper.get('#attendee-company').setValue('Analytical Engines')
+    await wrapper.get('#attendee-jobTitle').setValue('Engineer')
+
+    const nextButton = wrapper.get('.registration-action-bar__primary')
+    expect(nextButton.text()).toContain('Next: Sessions')
+    expect(nextButton.attributes('disabled')).toBeUndefined()
+
+    await nextButton.trigger('click')
+
+    expect(wrapper.findAll('.session-card--error')).toHaveLength(2)
+    expect(wrapper.get('[role="alert"]').text()).toBe('Selected sessions have overlapping times.')
+  })
+
   it('shows the success page after a valid submission and resets from Back to Home', async () => {
     const wrapper = mount(IndexPage, {
       attachTo: document.body,

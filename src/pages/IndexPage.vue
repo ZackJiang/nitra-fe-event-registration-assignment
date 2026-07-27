@@ -56,6 +56,9 @@ const primaryLabel = computed(() => (
     ? `Next: ${WIZARD_STEPS[currentStep.value].label}`
     : 'Submit Registration'
 ))
+const isPrimaryDisabled = computed(() => (
+  currentStep.value === WIZARD_STEP.REVIEW && isSubmitDisabled.value
+))
 
 async function handlePrimaryAction() {
   if (currentStep.value === WIZARD_STEP.REVIEW) {
@@ -154,7 +157,7 @@ async function handleBackHome() {
         v-if="!isSubmissionSucceeded"
         :show-back="currentStep > WIZARD_STEP.ATTENDEE"
         :primary-label="primaryLabel"
-        :primary-disabled="isSubmitDisabled"
+        :primary-disabled="isPrimaryDisabled"
         @back="previousStep"
         @primary="handlePrimaryAction"
       />
