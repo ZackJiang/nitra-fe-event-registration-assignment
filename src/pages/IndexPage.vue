@@ -6,6 +6,7 @@ import SessionStep from '../components/registration/sessions/SessionStep.vue'
 import ReviewStep from '../components/registration/review/ReviewStep.vue'
 import RegistrationActionBar from '../components/registration/shell/RegistrationActionBar.vue'
 import RegistrationWizardShell from '../components/registration/shell/RegistrationWizardShell.vue'
+import RegistrationSuccess from '../components/registration/success/RegistrationSuccess.vue'
 import { useRegistrationWizard } from '../composables/useRegistrationWizard.js'
 import { WIZARD_STEPS } from '../constants/wizard.js'
 import { event } from '../mocks/event.js'
@@ -24,6 +25,7 @@ const {
   nextStep,
   pricingBreakdown,
   previousStep,
+  reset,
   selectTicket,
   selectedAddons,
   selectedSessions,
@@ -31,6 +33,7 @@ const {
   selectedSessionIds,
   setAddonQuantity,
   setAddonSize,
+  submission,
   submit,
   ticketTypeId,
   toggleSession,
@@ -38,6 +41,10 @@ const {
 } = useRegistrationWizard()
 
 const reviewStepRef = ref(null)
+const attendeeStepRef = ref(null)
+const successRef = ref(null)
+
+const isSubmissionSucceeded = computed(() => submission.status === 'succeeded')
 
 const ticketTypeModel = computed({
   get: () => ticketTypeId.value,
@@ -57,12 +64,22 @@ async function handlePrimaryAction() {
     if (!result.ok) {
       await nextTick()
       await reviewStepRef.value?.focusErrorSummary()
+      return
     }
+
+    await nextTick()
+    successRef.value?.focusHeading()
 
     return
   }
 
   nextStep()
+}
+
+async function handleBackHome() {
+  reset()
+  await nextTick()
+  attendeeStepRef.value?.focusHeading()
 }
 </script>
 
@@ -71,10 +88,22 @@ async function handlePrimaryAction() {
     v-model:current-step="currentStep"
     :event-name="event.name"
     :error-step-ids="errorStepIds"
+    :show-stepper="!isSubmissionSucceeded"
     @step-request="goToStep"
   >
+    <registration-success
+      v-if="isSubmissionSucceeded"
+      ref="successRef"
+      :event-name="event.name"
+      :confirmation-id="submission.confirmationId"
+      :attendee="attendee"
+      :selected-ticket="selectedTicket"
+      @back-home="handleBackHome"
+    />
+
     <attendee-step
-      v-if="currentStep === 1"
+      v-else-if="currentStep === 1"
+      ref="attendeeStepRef"
       v-model:ticket-type-id="ticketTypeModel"
       v-model:full-name="attendee.fullName"
       v-model:email="attendee.email"
@@ -122,6 +151,7 @@ async function handlePrimaryAction() {
 
     <template #actions>
       <registration-action-bar
+        v-if="!isSubmissionSucceeded"
         :show-back="currentStep > 1"
         :primary-label="primaryLabel"
         :primary-disabled="isSubmitDisabled"

@@ -141,7 +141,7 @@ Figma 實作基準：
 對照 Figma node `1:3912`：
 
 - 成功後移除 Stepper，保留 Header，顯示置中的 success icon、標題、confirmation ID、姓名、ticket 與 email。
-- 因 README 要求成功頁含 summary，在 Figma hero 下方增加精簡的 sessions、addons 與 total summary card。
+- 成功頁嚴格遵循 Figma hero，不新增 sessions、add-ons 或 total summary card。
 - confirmation ID 在成功提交時產生一次並保持穩定，格式使用 `WDS2028-xxxxx`。
 - Back to Home 清空報名狀態並回到 Step 1。
 
@@ -171,7 +171,7 @@ Figma 實作基準：
   - session ID array
   - `Record<addonId, { quantity, size }>`
 - `ValidationIssue`：包含 step、field/item ID、message；同時驅動 banner、Stepper、fields/cards 與 review sections。
-- `PricingBreakdown`：包含 ticket line、addon lines、discount line、subtotal、total；Step 3、Step 4、success 共用。
+- `PricingBreakdown`：包含 ticket line、addon lines、discount line、subtotal、total；由 Step 3 與 Step 4 共用。
 - 共用 UI 元件包含 TicketCard、SessionCard、AddonCard、QuantityPicker、OrderSummary、ReviewSection；可編輯 child state 優先使用 `defineModel()`。
 - 不使用 Pinia、provide/inject、localStorage 或後端 API。
 
@@ -182,7 +182,7 @@ Figma 實作基準：
 - Step 2：tabs、selected count、sold-out disabled、submit 後 conflict state。
 - Step 3：workshop conflict、商品尺寸、quantity 上下限、shipping banner、order summary。
 - Step 4：全步驟驗證、全部錯誤呈現、Edit navigation、disabled/re-enabled submit。
-- Success：confirmation ID 只產生一次、摘要正確、Back to Home 完整重置。
+- Success：confirmation ID 只產生一次、Figma hero 範圍正確、Back to Home 完整重置。
 - 人工驗收：1440px、1024px、768px、375px；mouse、keyboard、focus、hover、disabled、error、success。
 
 ## 假設與優先順序

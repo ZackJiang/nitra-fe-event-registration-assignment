@@ -197,4 +197,35 @@ describe('IndexPage registration state integration', () => {
     expect(wrapper.get('.registration-action-bar__primary').attributes('disabled')).toBeUndefined()
     wrapper.unmount()
   })
+
+  it('shows the success page after a valid submission and resets from Back to Home', async () => {
+    const wrapper = mount(IndexPage, {
+      attachTo: document.body,
+    })
+
+    await wrapper.findAll('.q-radio')[1].trigger('click')
+    await wrapper.get('#attendee-fullName').setValue('Ada Lovelace')
+    await wrapper.get('#attendee-email').setValue('ada@example.com')
+    await wrapper.get('#attendee-phone').setValue('+1 (415) 555-0123')
+    await wrapper.get('#attendee-company').setValue('Analytical Engines')
+    await wrapper.get('#attendee-jobTitle').setValue('Engineer')
+
+    for (let step = 1; step < 4; step += 1) {
+      await wrapper.get('.registration-action-bar__primary').trigger('click')
+    }
+    await wrapper.get('.registration-action-bar__primary').trigger('click')
+
+    expect(wrapper.get('#registration-success-heading').text()).toBe('Registration Complete!')
+    expect(wrapper.find('.registration-stepper-shell').exists()).toBe(false)
+    expect(wrapper.find('.registration-action-bar').exists()).toBe(false)
+    expect(document.activeElement).toBe(wrapper.get('#registration-success-heading').element)
+
+    await wrapper.get('.registration-success__button').trigger('click')
+
+    expect(wrapper.get('.q-stepper__tab--active').text()).toContain('Attendee Info')
+    expect(wrapper.find('.ticket-card--selected').exists()).toBe(false)
+    expect(wrapper.get('#attendee-fullName').element.value).toBe('')
+    expect(document.activeElement).toBe(wrapper.get('#ticket-selection-heading').element)
+    wrapper.unmount()
+  })
 })

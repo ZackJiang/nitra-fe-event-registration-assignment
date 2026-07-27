@@ -34,6 +34,17 @@ function focusFirstTicket() {
   return true
 }
 
+function focusHeading() {
+  const heading = document.getElementById(headingId)
+
+  if (!heading) {
+    return false
+  }
+
+  heading.focus()
+  return true
+}
+
 async function handleRadioGroupKeydown(event) {
   const supportedKeys = ['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'Home', 'End']
 
@@ -67,6 +78,7 @@ async function handleRadioGroupKeydown(event) {
 }
 
 defineExpose({
+  focusHeading,
   focusFirstTicket,
 })
 </script>
@@ -79,6 +91,7 @@ defineExpose({
     <h2
       :id="headingId"
       class="ticket-selection__heading"
+      tabindex="-1"
     >
       Select Ticket Type
     </h2>

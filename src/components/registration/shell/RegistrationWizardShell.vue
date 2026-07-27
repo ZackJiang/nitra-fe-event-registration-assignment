@@ -8,6 +8,10 @@ defineProps({
     type: String,
     required: true,
   },
+  showStepper: {
+    type: Boolean,
+    default: true,
+  },
   errorStepIds: {
     type: Array,
     default: () => [],
@@ -33,6 +37,7 @@ const currentStep = defineModel('currentStep', {
         <registration-header :event-name="eventName" />
 
         <registration-stepper
+          v-if="showStepper"
           v-model:current-step="currentStep"
           :error-step-ids="errorStepIds"
           @step-request="emit('step-request', $event)"

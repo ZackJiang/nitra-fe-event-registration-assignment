@@ -20,4 +20,21 @@ describe('RegistrationWizardShell', () => {
     expect(wrapper.get('[data-test="actions"]').text()).toBe('Actions')
     expect(wrapper.get('header').text()).toContain('WebDev Summit 2028')
   })
+
+  it('can omit the stepper without changing the shared header or content slot', () => {
+    const wrapper = mount(RegistrationWizardShell, {
+      props: {
+        currentStep: 4,
+        eventName: 'WebDev Summit 2028',
+        showStepper: false,
+      },
+      slots: {
+        default: '<section data-test="success">Registration complete</section>',
+      },
+    })
+
+    expect(wrapper.find('.registration-stepper-shell').exists()).toBe(false)
+    expect(wrapper.get('header').text()).toContain('WebDev Summit 2028')
+    expect(wrapper.get('[data-test="success"]').text()).toBe('Registration complete')
+  })
 })

@@ -82,9 +82,14 @@ async function focusFirstError() {
     : false
 }
 
+function focusHeading() {
+  return ticketSelectionRef.value?.focusHeading() ?? false
+}
+
 onMounted(focusFirstError)
 
 defineExpose({
+  focusHeading,
   focusFirstError,
 })
 </script>
