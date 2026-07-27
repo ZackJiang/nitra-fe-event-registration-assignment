@@ -142,7 +142,7 @@ describe('IndexPage registration state integration', () => {
     wrapper.unmount()
   })
 
-  it('shows deferred errors and focuses ticket selection after returning to Step 1', async () => {
+  it('shows deferred errors and focuses the first attendee field after returning to Step 1', async () => {
     const wrapper = mount(IndexPage, {
       attachTo: document.body,
     })
@@ -158,8 +158,8 @@ describe('IndexPage registration state integration', () => {
       await wrapper.get('.registration-action-bar__back').trigger('click')
     }
 
-    expect(wrapper.get('#ticket-selection-error').text()).toBe('Select a ticket type.')
-    expect(document.activeElement).toBe(wrapper.get('.q-radio').element)
+    expect(wrapper.find('#ticket-selection-error').exists()).toBe(false)
+    expect(document.activeElement).toBe(wrapper.get('#attendee-fullName').element)
     wrapper.unmount()
   })
 
@@ -223,7 +223,7 @@ describe('IndexPage registration state integration', () => {
     await wrapper.get('.registration-success__button').trigger('click')
 
     expect(wrapper.get('.q-stepper__tab--active').text()).toContain('Attendee Info')
-    expect(wrapper.find('.ticket-card--selected').exists()).toBe(false)
+    expect(wrapper.find('.ticket-card--selected').exists()).toBe(true)
     expect(wrapper.get('#attendee-fullName').element.value).toBe('')
     expect(document.activeElement).toBe(wrapper.get('#ticket-selection-heading').element)
     wrapper.unmount()

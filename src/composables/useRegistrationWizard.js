@@ -22,9 +22,10 @@ const CONFIRMATION_CHARACTERS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
  * Create a fresh registration state object.
  *
  * @param {Array<{ id: string }> | null | undefined} addonData
+ * @param {Array<{ id: string }> | null | undefined} ticketData
  * @returns {import('../types/registration.js').RegistrationState}
  */
-export function createInitialRegistrationState(addonData) {
+export function createInitialRegistrationState(addonData, ticketData) {
   const addonSelections = Array.isArray(addonData)
     ? Object.fromEntries(addonData.map((addon) => [
       addon.id,
@@ -42,7 +43,7 @@ export function createInitialRegistrationState(addonData) {
       jobTitle: '',
       shippingAddress: '',
     },
-    ticketTypeId: null,
+    ticketTypeId: getDefaultTicketTypeId(ticketData),
     selectedSessionIds: [],
     addonSelections,
     hasAttemptedSubmit: false,
@@ -51,6 +52,22 @@ export function createInitialRegistrationState(addonData) {
       confirmationId: null,
     },
   }
+}
+
+/**
+ * Return the first usable ticket ID from the configured display order.
+ *
+ * @param {Array<{ id: unknown }> | null | undefined} ticketData
+ * @returns {string | null}
+ */
+function getDefaultTicketTypeId(ticketData) {
+  if (!Array.isArray(ticketData)) {
+    return null
+  }
+
+  return ticketData.find((ticket) => (
+    typeof ticket?.id === 'string' && ticket.id.length > 0
+  ))?.id ?? null
 }
 
 /**
@@ -90,7 +107,7 @@ export function useRegistrationWizard({
 } = {}) {
   const normalizedSessions = Array.isArray(sessionData) ? sessionData : []
   const normalizedAddons = Array.isArray(addonData) ? addonData : []
-  const initialState = createInitialRegistrationState(normalizedAddons)
+  const initialState = createInitialRegistrationState(normalizedAddons, eventData?.ticketTypes)
 
   const currentStep = ref(initialState.currentStep)
   const attendee = reactive(initialState.attendee)
@@ -389,7 +406,7 @@ export function useRegistrationWizard({
    * @returns {void}
    */
   function reset() {
-    const nextState = createInitialRegistrationState(normalizedAddons)
+    const nextState = createInitialRegistrationState(normalizedAddons, eventData?.ticketTypes)
 
     currentStep.value = nextState.currentStep
     Object.assign(attendee, nextState.attendee)

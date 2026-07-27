@@ -5,6 +5,7 @@ import {
   createInitialRegistrationState,
   useRegistrationWizard,
 } from '../../../src/composables/useRegistrationWizard.js'
+import { event } from '../../../src/mocks/event.js'
 
 function completeRequiredRegistration(wizard) {
   Object.assign(wizard.attendee, {
@@ -19,8 +20,8 @@ function completeRequiredRegistration(wizard) {
 
 describe('useRegistrationWizard', () => {
   it('creates independent initial state and normalized add-on selections', () => {
-    const firstState = createInitialRegistrationState(addons)
-    const secondState = createInitialRegistrationState(addons)
+    const firstState = createInitialRegistrationState(addons, event.ticketTypes)
+    const secondState = createInitialRegistrationState(addons, event.ticketTypes)
 
     firstState.attendee.fullName = 'Changed'
     firstState.addonSelections.ws1.quantity = 1
@@ -30,7 +31,15 @@ describe('useRegistrationWizard', () => {
       quantity: 0,
       size: null,
     })
+    expect(secondState.ticketTypeId).toBe('general')
     expect(Object.keys(secondState.addonSelections)).toHaveLength(addons.length)
+  })
+
+  it('uses no default ticket when ticket data is empty or invalid', () => {
+    expect(createInitialRegistrationState(addons, [])).toMatchObject({ ticketTypeId: null })
+    expect(createInitialRegistrationState(addons, [{ id: null }])).toMatchObject({
+      ticketTypeId: null,
+    })
   })
 
   it('navigates within the four wizard steps', () => {
@@ -169,7 +178,7 @@ describe('useRegistrationWizard', () => {
 
     expect(wizard.currentStep.value).toBe(1)
     expect(wizard.attendee.fullName).toBe('')
-    expect(wizard.ticketTypeId.value).toBeNull()
+    expect(wizard.ticketTypeId.value).toBe('general')
     expect(wizard.selectedSessionIds.value).toEqual([])
     expect(wizard.addonSelections.meal1.quantity).toBe(0)
     expect(wizard.hasAttemptedSubmit.value).toBe(false)
