@@ -1,5 +1,6 @@
 <script setup>
 import { computed } from 'vue'
+import errorStepIcon from '../../../assets/brand/stepper-error.svg'
 import { isWizardStepId, WIZARD_STEPS } from '../../../constants/wizard.js'
 
 const props = defineProps({
@@ -25,6 +26,7 @@ const currentStep = defineModel('currentStep', {
 })
 
 const errorSteps = computed(() => new Set(props.errorStepIds))
+const errorIcon = `img:${errorStepIcon}`
 
 function canNavigateTo(stepId) {
   return stepId <= currentStep.value || errorSteps.value.has(stepId)
@@ -53,7 +55,7 @@ function requestStep(stepId) {
       inactive-color="grey-6"
       done-icon="check"
       active-icon="none"
-      error-icon="priority_high"
+      :error-icon="errorIcon"
       @update:model-value="requestStep"
     >
       <q-step
@@ -64,6 +66,8 @@ function requestStep(stepId) {
         :prefix="step.id"
         :done="step.id < currentStep && !errorSteps.has(step.id)"
         :error="errorSteps.has(step.id)"
+        :active-icon="errorSteps.has(step.id) ? errorIcon : 'none'"
+        :active-color="errorSteps.has(step.id) ? 'negative' : undefined"
         :header-nav="canNavigateTo(step.id)"
       >
         <slot v-if="step.id === currentStep" />
@@ -114,6 +118,11 @@ function requestStep(stepId) {
   font-weight: 610;
 }
 
+.registration-stepper :deep(.q-stepper__tab--error .q-stepper__label),
+.registration-stepper :deep(.q-stepper__tab--error .q-stepper__title) {
+  color: var(--text-danger-default) !important;
+}
+
 .registration-stepper :deep(.q-stepper__dot) {
   width: 32px;
   min-width: 32px;
@@ -132,12 +141,11 @@ function requestStep(stepId) {
 }
 
 .registration-stepper :deep(.q-stepper__tab--error-with-icon .q-stepper__dot) {
-  background: var(--bg-danger-emphasis-rest) !important;
-  color: var(--text-inverse-default);
+  background: transparent !important;
 }
 
-.registration-stepper :deep(.q-stepper__dot span) {
-  color: currentColor;
+.registration-stepper :deep(.q-stepper__tab--error-with-icon .q-stepper__dot .q-icon) {
+  font-size: 32px !important;
 }
 
 .registration-stepper :deep(.q-stepper__label::after),
@@ -151,6 +159,11 @@ function requestStep(stepId) {
 .registration-stepper :deep(.q-stepper__tab--done .q-stepper__dot::before),
 .registration-stepper :deep(.q-stepper__tab--done .q-stepper__dot::after) {
   background: var(--bg-brand-emphasis-rest);
+}
+
+/* A connector belongs to both adjacent steps. Keep both halves neutral after an error. */
+.registration-stepper :deep(.q-stepper__tab--error + .q-stepper__tab .q-stepper__dot::before) {
+  background: var(--bg-surface-l2) !important;
 }
 
 /* The active dot closes the connector coming from the completed step. */

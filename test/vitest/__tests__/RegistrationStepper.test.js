@@ -20,6 +20,10 @@ describe('RegistrationStepper', () => {
 
     expect(tabs).toHaveLength(4)
     expect(tabs[0].classes()).toContain('q-stepper__tab--error')
+    expect(tabs[0].classes()).toContain('q-stepper__tab--error-with-icon')
+    expect(decodeURIComponent(tabs[0].get('.q-stepper__dot .q-icon img').attributes('src')))
+      .toContain('exclamation-icon')
+    expect(tabs[0].get('.q-stepper__title').text()).toBe('Attendee Info')
     expect(tabs[1].classes()).toContain('q-stepper__tab--active')
     expect(tabs[1].get('.q-stepper__dot').text()).toBe('2')
     expect(tabs[2].classes()).not.toContain('q-stepper__tab--active')
@@ -29,6 +33,22 @@ describe('RegistrationStepper', () => {
       expect.stringContaining('Add-ons'),
       expect.stringContaining('Review'),
     ])
+  })
+
+  it('keeps the error icon when the invalid step is active', () => {
+    const wrapper = mountStepper({
+      currentStep: 1,
+      errorStepIds: [1],
+    })
+    const activeErrorStep = wrapper.findAll('.q-stepper__tab')[0]
+
+    expect(activeErrorStep.classes()).toEqual(expect.arrayContaining([
+      'q-stepper__tab--active',
+      'q-stepper__tab--error',
+      'q-stepper__tab--error-with-icon',
+    ]))
+    expect(decodeURIComponent(activeErrorStep.get('.q-stepper__dot .q-icon img').attributes('src')))
+      .toContain('exclamation-icon')
   })
 
   it('marks earlier valid steps as completed', () => {
