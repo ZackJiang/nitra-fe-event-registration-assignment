@@ -58,4 +58,19 @@ describe('OrderSummary', () => {
     expect(wrapper.text()).not.toContain('Workshop discount')
     expect(wrapper.text()).toContain('$448.00')
   })
+
+  it('supports the full-width review variant without changing the default sidebar API', () => {
+    const wrapper = mount(OrderSummary, {
+      props: {
+        pricingBreakdown: getBreakdown('general'),
+        title: 'Pricing Summary',
+        totalLabel: 'Grand Total',
+        variant: 'review',
+      },
+    })
+
+    expect(wrapper.classes()).toContain('order-summary--review')
+    expect(wrapper.text()).toContain('Pricing Summary')
+    expect(wrapper.text()).toContain('Grand Total')
+  })
 })

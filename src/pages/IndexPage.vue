@@ -1,8 +1,9 @@
 <script setup>
-import { computed } from 'vue'
+import { computed, nextTick, ref } from 'vue'
 import AddonStep from '../components/registration/addons/AddonStep.vue'
 import AttendeeStep from '../components/registration/attendee/AttendeeStep.vue'
 import SessionStep from '../components/registration/sessions/SessionStep.vue'
+import ReviewStep from '../components/registration/review/ReviewStep.vue'
 import RegistrationActionBar from '../components/registration/shell/RegistrationActionBar.vue'
 import RegistrationWizardShell from '../components/registration/shell/RegistrationWizardShell.vue'
 import { useRegistrationWizard } from '../composables/useRegistrationWizard.js'
@@ -24,6 +25,9 @@ const {
   pricingBreakdown,
   previousStep,
   selectTicket,
+  selectedAddons,
+  selectedSessions,
+  selectedTicket,
   selectedSessionIds,
   setAddonQuantity,
   setAddonSize,
@@ -32,6 +36,8 @@ const {
   toggleSession,
   visibleValidationIssues,
 } = useRegistrationWizard()
+
+const reviewStepRef = ref(null)
 
 const ticketTypeModel = computed({
   get: () => ticketTypeId.value,
@@ -44,9 +50,15 @@ const primaryLabel = computed(() => (
     : 'Submit Registration'
 ))
 
-function handlePrimaryAction() {
+async function handlePrimaryAction() {
   if (currentStep.value === WIZARD_STEPS.length) {
-    submit()
+    const result = submit()
+
+    if (!result.ok) {
+      await nextTick()
+      await reviewStepRef.value?.focusErrorSummary()
+    }
+
     return
   }
 
@@ -93,6 +105,19 @@ function handlePrimaryAction() {
       :pricing-breakdown="pricingBreakdown"
       @set-addon-quantity="setAddonQuantity"
       @set-addon-size="setAddonSize"
+    />
+
+    <review-step
+      v-else-if="currentStep === 4"
+      ref="reviewStepRef"
+      :attendee="attendee"
+      :selected-ticket="selectedTicket"
+      :selected-sessions="selectedSessions"
+      :selected-addons="selectedAddons"
+      :pricing-breakdown="pricingBreakdown"
+      :visible-issues="visibleValidationIssues"
+      :has-selected-merchandise="hasSelectedMerchandise"
+      @edit-step="goToStep"
     />
 
     <template #actions>

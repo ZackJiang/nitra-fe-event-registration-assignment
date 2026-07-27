@@ -7,6 +7,19 @@ const props = defineProps({
     type: Object,
     required: true,
   },
+  title: {
+    type: String,
+    default: 'Order Summary',
+  },
+  totalLabel: {
+    type: String,
+    default: 'Total',
+  },
+  variant: {
+    type: String,
+    default: 'sidebar',
+    validator: (value) => ['sidebar', 'review'].includes(value),
+  },
 })
 
 const hasItems = computed(() => (
@@ -28,6 +41,7 @@ function getAddonLabel(line) {
 <template>
   <q-card
     class="order-summary"
+    :class="`order-summary--${variant}`"
     flat
     bordered
     tag="aside"
@@ -37,7 +51,7 @@ function getAddonLabel(line) {
       id="order-summary-heading"
       class="order-summary__heading"
     >
-      Order Summary
+      {{ title }}
     </h2>
 
     <p
@@ -75,7 +89,7 @@ function getAddonLabel(line) {
     <q-separator class="order-summary__separator" />
 
     <div class="order-summary__line order-summary__total">
-      <span>Total</span>
+      <span>{{ totalLabel }}</span>
       <span>{{ formatUsd(pricingBreakdown.totalCents) }}</span>
     </div>
   </q-card>
@@ -150,6 +164,12 @@ function getAddonLabel(line) {
 .order-summary__total {
   color: var(--text-neutral-default);
   font-weight: 570;
+}
+
+.order-summary--review {
+  width: 100%;
+  flex-basis: auto;
+  gap: var(--space-sm);
 }
 
 @media (max-width: 1023px) {

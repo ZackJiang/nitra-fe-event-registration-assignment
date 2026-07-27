@@ -162,4 +162,39 @@ describe('IndexPage registration state integration', () => {
     expect(document.activeElement).toBe(wrapper.get('.q-radio').element)
     wrapper.unmount()
   })
+
+  it('keeps submit failures on Review, focuses the error summary, and enables resubmission after correction', async () => {
+    const wrapper = mount(IndexPage, {
+      attachTo: document.body,
+    })
+
+    for (let step = 1; step < 4; step += 1) {
+      await wrapper.get('.registration-action-bar__primary').trigger('click')
+    }
+    await wrapper.get('.registration-action-bar__primary').trigger('click')
+
+    const errorBanner = wrapper.get('[role="alert"]')
+    expect(wrapper.get('.q-stepper__tab--active').text()).toContain('Review')
+    expect(errorBanner.text()).toContain('Step 1: Full name is required.')
+    expect(document.activeElement).toBe(errorBanner.get('.review-error-banner__heading').element)
+    expect(wrapper.get('.registration-action-bar__primary').attributes('disabled')).toBeDefined()
+
+    await errorBanner.findAll('.review-error-banner__link')[0].trigger('click')
+    expect(wrapper.get('.q-stepper__tab--active').text()).toContain('Attendee Info')
+
+    await wrapper.findAll('.q-radio')[0].trigger('click')
+    await wrapper.get('#attendee-fullName').setValue('Ada Lovelace')
+    await wrapper.get('#attendee-email').setValue('ada@example.com')
+    await wrapper.get('#attendee-phone').setValue('+1 (415) 555-0123')
+    await wrapper.get('#attendee-company').setValue('Analytical Engines')
+    await wrapper.get('#attendee-jobTitle').setValue('Engineer')
+
+    for (let step = 1; step < 4; step += 1) {
+      await wrapper.get('.registration-action-bar__primary').trigger('click')
+    }
+
+    expect(wrapper.find('[role="alert"]').exists()).toBe(false)
+    expect(wrapper.get('.registration-action-bar__primary').attributes('disabled')).toBeUndefined()
+    wrapper.unmount()
+  })
 })
