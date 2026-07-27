@@ -166,6 +166,11 @@ function requestStep(stepId) {
   background: var(--bg-surface-l2) !important;
 }
 
+/* An invalid step still closes the completed connector coming from a valid step. */
+.registration-stepper :deep(.q-stepper__tab--done + .q-stepper__tab--error .q-stepper__dot::before) {
+  background: var(--bg-brand-emphasis-rest);
+}
+
 /* The active dot closes the connector coming from the completed step. */
 .registration-stepper :deep(.q-stepper__tab--active .q-stepper__dot::before) {
   background: var(--bg-brand-emphasis-rest);

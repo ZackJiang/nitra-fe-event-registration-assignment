@@ -72,6 +72,18 @@ describe('RegistrationStepper', () => {
     expect(wrapper.findAll('.q-stepper__tab--done')).toHaveLength(2)
   })
 
+  it('keeps the full connector completed when the next step has an error', () => {
+    const wrapper = mountStepper({
+      currentStep: 3,
+      errorStepIds: [2],
+    })
+    const tabs = wrapper.findAll('.q-stepper__tab')
+
+    expect(tabs[0].classes()).toContain('q-stepper__tab--done')
+    expect(tabs[1].classes()).toContain('q-stepper__tab--error')
+    expect(tabs[1].get('.q-stepper__dot').exists()).toBe(true)
+  })
+
   it('allows visited steps but blocks unvisited future steps', async () => {
     const wrapper = mountStepper()
     const tabs = wrapper.findAll('.q-stepper__tab')
