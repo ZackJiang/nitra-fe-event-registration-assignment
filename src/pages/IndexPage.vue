@@ -8,7 +8,7 @@ import RegistrationActionBar from '../components/registration/shell/Registration
 import RegistrationWizardShell from '../components/registration/shell/RegistrationWizardShell.vue'
 import RegistrationSuccess from '../components/registration/success/RegistrationSuccess.vue'
 import { useRegistrationWizard } from '../composables/useRegistrationWizard.js'
-import { WIZARD_STEPS } from '../constants/wizard.js'
+import { WIZARD_STEP, WIZARD_STEPS } from '../constants/wizard.js'
 import { event } from '../mocks/event.js'
 
 const {
@@ -52,13 +52,13 @@ const ticketTypeModel = computed({
 })
 
 const primaryLabel = computed(() => (
-  currentStep.value < WIZARD_STEPS.length
+  currentStep.value < WIZARD_STEP.REVIEW
     ? `Next: ${WIZARD_STEPS[currentStep.value].label}`
     : 'Submit Registration'
 ))
 
 async function handlePrimaryAction() {
-  if (currentStep.value === WIZARD_STEPS.length) {
+  if (currentStep.value === WIZARD_STEP.REVIEW) {
     const result = submit()
 
     if (!result.ok) {
@@ -102,7 +102,7 @@ async function handleBackHome() {
     />
 
     <attendee-step
-      v-else-if="currentStep === 1"
+      v-else-if="currentStep === WIZARD_STEP.ATTENDEE"
       ref="attendeeStepRef"
       v-model:ticket-type-id="ticketTypeModel"
       v-model:full-name="attendee.fullName"
@@ -117,7 +117,7 @@ async function handleBackHome() {
     />
 
     <session-step
-      v-else-if="currentStep === 2"
+      v-else-if="currentStep === WIZARD_STEP.SESSIONS"
       :grouped-sessions="groupedSessions"
       :selected-session-ids="selectedSessionIds"
       :visible-issues="visibleValidationIssues"
@@ -125,7 +125,7 @@ async function handleBackHome() {
     />
 
     <addon-step
-      v-else-if="currentStep === 3"
+      v-else-if="currentStep === WIZARD_STEP.ADDONS"
       :grouped-addons="groupedAddons"
       :addon-selections="addonSelections"
       :addon-availability-by-id="addonAvailabilityById"
@@ -137,7 +137,7 @@ async function handleBackHome() {
     />
 
     <review-step
-      v-else-if="currentStep === 4"
+      v-else-if="currentStep === WIZARD_STEP.REVIEW"
       ref="reviewStepRef"
       :attendee="attendee"
       :selected-ticket="selectedTicket"
@@ -152,7 +152,7 @@ async function handleBackHome() {
     <template #actions>
       <registration-action-bar
         v-if="!isSubmissionSucceeded"
-        :show-back="currentStep > 1"
+        :show-back="currentStep > WIZARD_STEP.ATTENDEE"
         :primary-label="primaryLabel"
         :primary-disabled="isSubmitDisabled"
         @back="previousStep"

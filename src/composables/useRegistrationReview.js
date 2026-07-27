@@ -1,5 +1,6 @@
 import { computed } from 'vue'
 import { ADDON_CATEGORIES } from '../constants/addons.js'
+import { WIZARD_STEP } from '../constants/wizard.js'
 import { formatUsd } from '../utils/registrationPricing.js'
 import { formatUtcDate, formatUtcTimeRange } from '../utils/registrationSchedule.js'
 
@@ -27,9 +28,9 @@ export function useRegistrationReview(input) {
     issues[issue.stepId].push(issue)
     return issues
   }, {}))
-  const attendeeIssues = computed(() => issuesByStep.value[1] ?? [])
-  const sessionIssues = computed(() => issuesByStep.value[2] ?? [])
-  const addonIssues = computed(() => issuesByStep.value[3] ?? [])
+  const attendeeIssues = computed(() => issuesByStep.value[WIZARD_STEP.ATTENDEE] ?? [])
+  const sessionIssues = computed(() => issuesByStep.value[WIZARD_STEP.SESSIONS] ?? [])
+  const addonIssues = computed(() => issuesByStep.value[WIZARD_STEP.ADDONS] ?? [])
   const addonLinesById = computed(() => new Map(
     input.pricingBreakdown.addonLines.map((line) => [line.sourceId, line]),
   ))

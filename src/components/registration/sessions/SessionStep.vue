@@ -1,5 +1,6 @@
 <script setup>
 import { computed, nextTick, onMounted, ref } from 'vue'
+import { WIZARD_STEP } from '../../../constants/wizard.js'
 import { formatUtcDate, isAtCapacity } from '../../../utils/registrationSchedule.js'
 import SessionCard from './SessionCard.vue'
 
@@ -41,7 +42,7 @@ const selectedCountLabel = computed(() => {
 })
 const sessionIssues = computed(() => (
   props.visibleIssues.filter((issue) => (
-    issue.stepId === 2 && issue.targetType === 'session'
+    issue.stepId === WIZARD_STEP.SESSIONS && issue.targetType === 'session'
   ))
 ))
 const invalidSessionIds = computed(() => new Set(

@@ -1,6 +1,6 @@
 import { computed, reactive, ref } from 'vue'
 import { ADDON_CATEGORY_IDS } from '../constants/addons.js'
-import { isWizardStepId, WIZARD_STEPS } from '../constants/wizard.js'
+import { isWizardStepId, WIZARD_STEP, WIZARD_STEPS } from '../constants/wizard.js'
 import { addons } from '../mocks/addons.js'
 import { event } from '../mocks/event.js'
 import { sessions } from '../mocks/sessions.js'
@@ -33,7 +33,7 @@ export function createInitialRegistrationState(addonData) {
     : {}
 
   return {
-    currentStep: 1,
+    currentStep: WIZARD_STEP.ATTENDEE,
     attendee: {
       fullName: '',
       email: '',
@@ -231,7 +231,7 @@ export function useRegistrationWizard({
    * @returns {number}
    */
   function nextStep() {
-    currentStep.value = Math.min(currentStep.value + 1, WIZARD_STEPS.length)
+    currentStep.value = Math.min(currentStep.value + 1, WIZARD_STEP.REVIEW)
     return currentStep.value
   }
 
@@ -241,7 +241,7 @@ export function useRegistrationWizard({
    * @returns {number}
    */
   function previousStep() {
-    currentStep.value = Math.max(currentStep.value - 1, 1)
+    currentStep.value = Math.max(currentStep.value - 1, WIZARD_STEP.ATTENDEE)
     return currentStep.value
   }
 

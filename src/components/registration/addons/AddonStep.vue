@@ -1,6 +1,7 @@
 <script setup>
 import { computed, nextTick, onMounted, ref } from 'vue'
 import { ADDON_CATEGORIES } from '../../../constants/addons.js'
+import { WIZARD_STEP } from '../../../constants/wizard.js'
 import OrderSummary from '../summary/OrderSummary.vue'
 import AddonCard from './AddonCard.vue'
 import MerchandiseCard from './MerchandiseCard.vue'
@@ -59,7 +60,7 @@ const issuesByAddonId = computed(() => {
   const issues = new Map()
 
   props.visibleIssues
-    .filter((issue) => issue.stepId === 3 && issue.targetType === 'addon')
+    .filter((issue) => issue.stepId === WIZARD_STEP.ADDONS && issue.targetType === 'addon')
     .forEach((issue) => {
       issue.targetIds
         .filter((targetId) => addonIdSet.value.has(targetId))

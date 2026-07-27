@@ -1,6 +1,7 @@
 <script setup>
 import { ref } from 'vue'
 import { useRegistrationReview } from '../../../composables/useRegistrationReview.js'
+import { WIZARD_STEP } from '../../../constants/wizard.js'
 import OrderSummary from '../summary/OrderSummary.vue'
 import ReviewErrorBanner from './ReviewErrorBanner.vue'
 import ReviewRows from './ReviewRows.vue'
@@ -85,7 +86,7 @@ defineExpose({
 
     <review-section
       title="Attendee Information"
-      :step-id="1"
+      :step-id="WIZARD_STEP.ATTENDEE"
       :has-error="attendeeIssues.length > 0"
       @edit="navigateToStep"
     >
@@ -94,7 +95,7 @@ defineExpose({
 
     <review-section
       title="Selected Sessions"
-      :step-id="2"
+      :step-id="WIZARD_STEP.SESSIONS"
       :has-error="sessionIssues.length > 0"
       @edit="navigateToStep"
     >
@@ -107,7 +108,7 @@ defineExpose({
 
     <review-section
       title="Add-ons"
-      :step-id="3"
+      :step-id="WIZARD_STEP.ADDONS"
       :has-error="addonIssues.length > 0"
       @edit="navigateToStep"
     >

@@ -1,13 +1,26 @@
 /**
- * Ordered wizard step metadata shared by the shell and future registration state.
+ * Stable identifiers for registration wizard steps.
+ *
+ * Values remain sequential because the Quasar stepper and wizard navigation use
+ * their natural order.
+ */
+export const WIZARD_STEP = Object.freeze({
+  ATTENDEE: 1,
+  SESSIONS: 2,
+  ADDONS: 3,
+  REVIEW: 4,
+})
+
+/**
+ * Ordered wizard step metadata shared by the shell and registration state.
  *
  * @type {ReadonlyArray<{ id: number, label: string }>}
  */
 export const WIZARD_STEPS = Object.freeze([
-  Object.freeze({ id: 1, label: 'Attendee Info' }),
-  Object.freeze({ id: 2, label: 'Sessions' }),
-  Object.freeze({ id: 3, label: 'Add-ons' }),
-  Object.freeze({ id: 4, label: 'Review' }),
+  Object.freeze({ id: WIZARD_STEP.ATTENDEE, label: 'Attendee Info' }),
+  Object.freeze({ id: WIZARD_STEP.SESSIONS, label: 'Sessions' }),
+  Object.freeze({ id: WIZARD_STEP.ADDONS, label: 'Add-ons' }),
+  Object.freeze({ id: WIZARD_STEP.REVIEW, label: 'Review' }),
 ])
 
 /**

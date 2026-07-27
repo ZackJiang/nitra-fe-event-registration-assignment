@@ -1,5 +1,6 @@
 <script setup>
 import { computed, nextTick, onMounted, ref } from 'vue'
+import { WIZARD_STEP } from '../../../constants/wizard.js'
 import AttendeeInformationForm from './AttendeeInformationForm.vue'
 import TicketSelection from './TicketSelection.vue'
 
@@ -42,7 +43,7 @@ const ticketSelectionRef = ref(null)
 const attendeeFormRef = ref(null)
 
 const stepOneIssues = computed(() => (
-  props.visibleIssues.filter((issue) => issue.stepId === 1)
+  props.visibleIssues.filter((issue) => issue.stepId === WIZARD_STEP.ATTENDEE)
 ))
 
 const ticketIssue = computed(() => (

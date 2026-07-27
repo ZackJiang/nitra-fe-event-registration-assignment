@@ -3,6 +3,7 @@ import {
   findScheduleConflicts,
   isAtCapacity,
 } from './registrationSchedule.js'
+import { WIZARD_STEP } from '../constants/wizard.js'
 
 const REQUIRED_ATTENDEE_FIELDS = Object.freeze([
   ['fullName', 'Full name'],
@@ -51,7 +52,7 @@ export function validateRegistration({
   if (hasSelectedMerchandise(selections, addons) && !hasText(attendee.shippingAddress)) {
     issues.push(createIssue(
       'attendee.shippingAddress.required',
-      1,
+      WIZARD_STEP.ATTENDEE,
       'field',
       ['shippingAddress'],
       'Shipping address is required when merchandise is selected.',
@@ -89,7 +90,7 @@ function validateAttendee(attendee, issues) {
     if (!hasText(attendee[fieldId])) {
       issues.push(createIssue(
         `attendee.${fieldId}.required`,
-        1,
+        WIZARD_STEP.ATTENDEE,
         'field',
         [fieldId],
         `${fieldLabel} is required.`,
@@ -100,7 +101,7 @@ function validateAttendee(attendee, issues) {
   if (hasText(attendee.email) && !EMAIL_PATTERN.test(attendee.email.trim())) {
     issues.push(createIssue(
       'attendee.email.invalid',
-      1,
+      WIZARD_STEP.ATTENDEE,
       'field',
       ['email'],
       'Enter a valid email address.',
@@ -132,7 +133,7 @@ function validateTicket(ticketTypeId, ticketTypes, issues) {
   if (typeof ticketTypeId !== 'string' || ticketTypeId.length === 0) {
     issues.push(createIssue(
       'ticket.required',
-      1,
+      WIZARD_STEP.ATTENDEE,
       'ticket',
       [],
       'Select a ticket type.',
@@ -143,7 +144,7 @@ function validateTicket(ticketTypeId, ticketTypes, issues) {
   if (!Array.isArray(ticketTypes) || !ticketTypes.some((ticket) => ticket.id === ticketTypeId)) {
     issues.push(createIssue(
       'ticket.invalid',
-      1,
+      WIZARD_STEP.ATTENDEE,
       'ticket',
       [ticketTypeId],
       'The selected ticket type is unavailable.',
@@ -171,7 +172,7 @@ function validateSessions(selectedSessionIds, sessions, issues) {
     if (!session) {
       issues.push(createIssue(
         'session.invalid',
-        2,
+        WIZARD_STEP.SESSIONS,
         'session',
         [String(sessionId)],
         'A selected session is unavailable.',
@@ -184,7 +185,7 @@ function validateSessions(selectedSessionIds, sessions, issues) {
     if (isAtCapacity(session.capacity, session.registered)) {
       issues.push(createIssue(
         'session.soldOut',
-        2,
+        WIZARD_STEP.SESSIONS,
         'session',
         [session.id],
         'A selected session is sold out.',
@@ -195,7 +196,7 @@ function validateSessions(selectedSessionIds, sessions, issues) {
   findScheduleConflicts(selectedSessions).forEach(({ firstId, secondId }) => {
     issues.push(createIssue(
       'session.conflict',
-      2,
+      WIZARD_STEP.SESSIONS,
       'session',
       [firstId, secondId],
       'Selected sessions have overlapping times.',
@@ -216,7 +217,7 @@ function validateAddons(selections, addons, selectedSessions, issues) {
     if (!addons.some((addon) => addon.id === addonId) && selection?.quantity !== 0) {
       issues.push(createIssue(
         'addon.invalid',
-        3,
+        WIZARD_STEP.ADDONS,
         'addon',
         [addonId],
         'A selected add-on is unavailable.',
@@ -236,7 +237,7 @@ function validateAddons(selections, addons, selectedSessions, issues) {
     ) {
       issues.push(createIssue(
         'addon.quantity.invalid',
-        3,
+        WIZARD_STEP.ADDONS,
         'addon',
         [addon.id],
         'The selected add-on quantity is invalid.',
@@ -254,7 +255,7 @@ function validateAddons(selections, addons, selectedSessions, issues) {
     ) {
       issues.push(createIssue(
         'addon.soldOut',
-        3,
+        WIZARD_STEP.ADDONS,
         'addon',
         [addon.id],
         'A selected workshop is sold out.',
@@ -266,7 +267,7 @@ function validateAddons(selections, addons, selectedSessions, issues) {
         if (doTimeRangesOverlap(addon.date, addon.endDate, session.date, session.endDate)) {
           issues.push(createIssue(
             'addon.workshopConflict',
-            3,
+            WIZARD_STEP.ADDONS,
             'addon',
             [addon.id, session.id],
             'A selected workshop overlaps with a selected session.',
@@ -283,7 +284,7 @@ function validateAddons(selections, addons, selectedSessions, issues) {
     ) {
       issues.push(createIssue(
         'addon.size.required',
-        3,
+        WIZARD_STEP.ADDONS,
         'addon',
         [addon.id],
         'Select an available size for this merchandise item.',
