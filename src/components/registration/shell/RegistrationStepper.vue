@@ -98,12 +98,12 @@ function requestStep(stepId) {
 
 .registration-stepper :deep(.q-stepper__tab) {
   width: 25%;
-  min-height: 32px;
+  min-height: var(--control-height-sm);
   min-width: 0;
   flex: 1 1 0;
   padding: 0;
   color: var(--text-neutral-quiet);
-  font-size: 13px;
+  font-size: var(--font-size-tab);
   font-weight: 485;
 }
 
@@ -124,13 +124,13 @@ function requestStep(stepId) {
 }
 
 .registration-stepper :deep(.q-stepper__dot) {
-  width: 32px;
-  min-width: 32px;
-  height: 32px;
+  width: var(--stepper-dot-size);
+  min-width: var(--stepper-dot-size);
+  height: var(--stepper-dot-size);
   margin-right: var(--space-control);
   background: var(--bg-surface-l2);
   color: var(--text-neutral-quiet);
-  font-size: 14px;
+  font-size: var(--font-size-control);
   font-weight: 610;
 }
 
@@ -145,13 +145,13 @@ function requestStep(stepId) {
 }
 
 .registration-stepper :deep(.q-stepper__tab--error-with-icon .q-stepper__dot .q-icon) {
-  font-size: 32px !important;
+  font-size: var(--stepper-error-icon-size) !important;
 }
 
 .registration-stepper :deep(.q-stepper__label::after),
 .registration-stepper :deep(.q-stepper__dot::before),
 .registration-stepper :deep(.q-stepper__dot::after) {
-  height: 2px;
+  height: var(--stepper-connector-height);
   background: var(--bg-surface-l2);
 }
 

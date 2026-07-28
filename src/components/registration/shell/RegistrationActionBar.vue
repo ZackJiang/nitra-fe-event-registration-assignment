@@ -75,12 +75,12 @@ defineEmits({
 
 .registration-action-bar__back,
 .registration-action-bar__primary {
-  min-width: 72px;
-  min-height: 40px;
+  min-width: var(--action-button-min-width);
+  min-height: var(--control-height-md);
   border-radius: var(--radius-control);
-  font-size: 14px;
+  font-size: var(--font-size-control);
   font-weight: 610;
-  line-height: 20px;
+  line-height: var(--line-height-control);
 }
 
 .registration-action-bar__back {

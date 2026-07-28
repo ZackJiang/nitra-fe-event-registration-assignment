@@ -15,7 +15,7 @@
 }
 
 .session-step__tabs {
-  min-height: 40px;
+  min-height: var(--control-height-md);
   max-width: 100%;
   padding: var(--space-2xs);
   border-radius: var(--radius-control);
@@ -23,11 +23,11 @@
 }
 
 .session-step__tab {
-  min-height: 32px;
+  min-height: var(--control-height-sm);
   padding: 0 var(--space-xl);
   border-radius: var(--radius-lg);
   color: var(--text-neutral-muted);
-  font-size: 13px;
+  font-size: var(--font-size-tab);
   font-weight: 570;
 }
 

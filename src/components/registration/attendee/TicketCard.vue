@@ -61,10 +61,12 @@ defineExpose({
 
 <template>
   <q-card
-    class="ticket-card"
+    class="ticket-card selectable-card"
     :class="{
       'ticket-card--selected': selected,
+      'selectable-card--selected': selected,
       'ticket-card--error': hasError,
+      'selectable-card--error': hasError,
     }"
     @click="emit('select', ticket.id)"
   >
@@ -100,7 +102,7 @@ defineExpose({
         <q-icon
           aria-hidden="true"
           name="check_circle"
-          size="14px"
+          size="var(--icon-size-sm)"
         />
         <span>{{ perk }}</span>
       </li>
@@ -119,55 +121,10 @@ defineExpose({
 <style scoped>
 .ticket-card {
   position: relative;
-  display: flex;
-  min-width: 0;
-  cursor: pointer;
-  flex-direction: column;
-  gap: var(--space-md);
-  overflow: hidden;
-  padding: var(--space-xl);
-  border: 1px solid var(--border-neutral-muted);
-  border-radius: var(--radius-md);
-  background: var(--bg-surface-l1);
-  box-shadow: var(--shadow-card);
-  color: var(--text-neutral-default);
-  transition:
-    background-color 150ms ease,
-    border-color 150ms ease,
-    transform 150ms ease;
-}
-
-.ticket-card:hover {
-  border-color: var(--border-brand-muted);
-  background: var(--bg-brand-subtle-hover);
-}
-
-.ticket-card:active {
-  transform: translateY(1px);
-  background: var(--bg-brand-subtle-active);
-}
-
-.ticket-card:focus-within {
-  outline: var(--focus-ring-width) solid var(--border-brand-emphasis);
-  outline-offset: var(--focus-ring-offset);
-}
-
-.ticket-card--selected {
-  padding: calc(var(--space-xl) - 1px);
-  border: 2px solid var(--border-brand-emphasis);
-  background: var(--bg-brand-subtle-rest);
-}
-
-.ticket-card--selected:hover {
-  background: var(--bg-brand-subtle-hover);
-}
-
-.ticket-card--selected:active {
-  background: var(--bg-brand-subtle-active);
-}
-
-.ticket-card--error {
-  border-color: var(--border-danger-emphasis);
+  --selectable-card-gap: var(--space-md);
+  --selectable-card-padding: var(--space-xl);
+  --selectable-card-background: var(--bg-surface-l1);
+  --selectable-card-selected-background: var(--bg-brand-subtle-rest);
 }
 
 .ticket-card__radio {
@@ -217,21 +174,15 @@ defineExpose({
 
 .ticket-card__selected-badge {
   align-self: flex-start;
-  padding: 3px 9px;
-  font-size: 11px;
+  padding: var(--badge-padding-block) var(--badge-padding-inline);
+  font-size: var(--font-size-caption);
   font-weight: 570;
-  line-height: 14px;
+  line-height: var(--line-height-caption);
 }
 
 @media (min-width: 1024px) {
   .ticket-card {
-    min-height: 288px;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .ticket-card {
-    transition: none;
+    min-height: var(--ticket-card-min-height);
   }
 }
 </style>

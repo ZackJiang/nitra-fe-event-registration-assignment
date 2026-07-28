@@ -119,12 +119,14 @@ defineExpose({
 
 <template>
   <q-card
-    class="addon-card"
+    class="addon-card selectable-card"
     :class="{
       'addon-card--selected': selected,
+      'selectable-card--selected': selected,
       'addon-card--unavailable': !selected && availability.isUnavailableForNewSelection,
       'addon-card--selected-conflict': selected && conflictMessage,
       'addon-card--error': hasError,
+      'selectable-card--error': hasError,
     }"
     :aria-disabled="!isInteractive ? 'true' : undefined"
     :data-addon-id="addon.id"
@@ -143,7 +145,7 @@ defineExpose({
           dense
           keep-color
           color="primary"
-          size="16px"
+          size="var(--icon-size-md)"
           :model-value="selected"
           :disable="!isInteractive"
           :aria-label="accessibleLabel"

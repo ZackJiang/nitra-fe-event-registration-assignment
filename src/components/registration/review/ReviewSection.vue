@@ -66,7 +66,7 @@ defineEmits({
 }
 
 .review-section--error {
-  border-width: 2px;
+  border-width: var(--border-width-emphasis);
   border-color: var(--border-danger-emphasis);
 }
 

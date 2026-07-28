@@ -98,9 +98,9 @@ function getAddonLabel(line) {
 <style scoped>
 .order-summary {
   display: flex;
-  width: 380px;
+  width: var(--wizard-summary-width);
   min-width: 0;
-  flex: 0 0 380px;
+  flex: 0 0 var(--wizard-summary-width);
   flex-direction: column;
   gap: var(--space-lg);
   padding: var(--space-2xl);
@@ -153,8 +153,8 @@ function getAddonLabel(line) {
 
 .order-summary__discount {
   color: var(--text-brand-emphasis);
-  font-size: 11px;
-  line-height: 14px;
+  font-size: var(--font-size-caption);
+  line-height: var(--line-height-caption);
 }
 
 .order-summary__separator {

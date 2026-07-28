@@ -155,8 +155,8 @@ defineExpose({
 .ticket-selection__error {
   margin: calc(var(--space-sm) * -1) 0 0;
   color: var(--text-danger-default);
-  font-size: 11px;
-  line-height: 14px;
+  font-size: var(--font-size-caption);
+  line-height: var(--line-height-caption);
 }
 
 @media (max-width: 1023px) {

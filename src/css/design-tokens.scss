@@ -19,12 +19,45 @@
   --radius-control: 10px;
   --radius-full: 9999px;
 
+  --font-size-caption: 11px;
+  --line-height-caption: 14px;
+  --font-size-overline: 10px;
+  --line-height-overline: 12px;
+  --font-size-control: 14px;
+  --line-height-control: 20px;
+  --font-size-tab: 13px;
+  --line-height-tab: 20px;
+
   --shadow-card: 0 4px 16px rgb(0 0 0 / 8%), 0 1px 3px rgb(0 0 0 / 4%);
+  --border-width-default: 1px;
+  --border-width-emphasis: 2px;
   --focus-ring-width: 2px;
   --focus-ring-offset: 2px;
 
+  --control-height-lg: 44px;
+  --control-height-md: 40px;
+  --control-height-sm: 32px;
+  --control-height-xs: 28px;
+  --icon-size-sm: 14px;
+  --icon-size-md: 16px;
+  --icon-size-lg: 20px;
+  --badge-padding-block: 3px;
+  --badge-padding-inline: 9px;
+  --action-button-min-width: 72px;
+  --quantity-picker-value-width: 24px;
+  --merchandise-size-select-width: 96px;
+  --stepper-dot-size: 32px;
+  --stepper-error-icon-size: 32px;
+  --stepper-connector-height: 2px;
+
   --wizard-shell-max-width: 1440px;
   --wizard-content-max-width: 1200px;
+  --wizard-summary-width: 380px;
+  --wizard-success-content-max-width: 720px;
+  --wizard-success-icon-size: 80px;
+  --wizard-success-icon-size-mobile: 64px;
+  --session-card-min-height: 162px;
+  --ticket-card-min-height: 288px;
   --wizard-header-height: 72px;
   --wizard-stepper-height: 80px;
   --wizard-action-height: 72px;

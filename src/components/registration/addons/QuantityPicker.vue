@@ -116,13 +116,13 @@ defineExpose({
 }
 
 .quantity-picker__button {
-  width: 28px;
-  min-width: 28px;
-  height: 28px;
-  min-height: 28px;
+  width: var(--control-height-xs);
+  min-width: var(--control-height-xs);
+  height: var(--control-height-xs);
+  min-height: var(--control-height-xs);
   background: var(--bg-surface-l2);
   color: var(--text-neutral-default);
-  font-size: 16px;
+  font-size: var(--icon-size-md);
 }
 
 .quantity-picker__button:focus-visible {
@@ -131,18 +131,18 @@ defineExpose({
 }
 
 .quantity-picker__value {
-  width: 24px;
+  width: var(--quantity-picker-value-width);
   color: var(--text-neutral-default);
-  font-size: 14px;
+  font-size: var(--font-size-control);
   font-weight: 610;
-  line-height: 28px;
+  line-height: var(--control-height-xs);
   text-align: center;
 }
 
 .quantity-picker__max {
   color: var(--text-neutral-quiet);
-  font-size: 10px;
-  line-height: 12px;
+  font-size: var(--font-size-overline);
+  line-height: var(--line-height-overline);
   white-space: nowrap;
 }
 </style>

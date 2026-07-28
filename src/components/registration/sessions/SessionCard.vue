@@ -118,11 +118,13 @@ defineExpose({
 
 <template>
   <q-card
-    class="session-card"
+    class="session-card selectable-card"
     :class="{
       'session-card--selected': selected,
+      'selectable-card--selected': selected,
       'session-card--sold-out': soldOut && !selected,
       'session-card--error': hasError,
+      'selectable-card--error': hasError,
     }"
     :aria-disabled="!isInteractive ? 'true' : undefined"
     :data-session-id="session.id"
@@ -142,7 +144,7 @@ defineExpose({
         dense
         keep-color
         color="primary"
-        size="16px"
+        size="var(--icon-size-md)"
         :model-value="selected"
         :disable="!isInteractive"
         :aria-label="accessibleLabel"
@@ -169,7 +171,7 @@ defineExpose({
       class="session-card__capacity"
       :class="`session-card__capacity--${capacityTone}`"
       rounded
-      size="6px"
+      size="var(--space-xs)"
       :value="utilization"
       :aria-label="`${capacityLabel}, ${Math.round(utilization * 100)}% capacity used`"
     />

@@ -194,14 +194,14 @@ defineExpose({
 }
 
 .attendee-field__input :deep(.q-field__control) {
-  min-height: 44px;
+  min-height: var(--control-height-lg);
   border-radius: var(--radius-md);
   background: var(--bg-surface-l0);
   color: var(--text-neutral-default);
 }
 
 .attendee-field__input :deep(.q-field__native) {
-  min-height: 44px;
+  min-height: var(--control-height-lg);
   padding: var(--space-control) var(--space-md);
   color: var(--text-neutral-default);
   font-size: var(--font-size-lg);
@@ -219,11 +219,11 @@ defineExpose({
 }
 
 .attendee-field__input :deep(.q-field__bottom) {
-  min-height: 14px;
+  min-height: var(--line-height-caption);
   padding: var(--space-xs) 0 0;
   color: var(--text-danger-default);
-  font-size: 11px;
-  line-height: 14px;
+  font-size: var(--font-size-caption);
+  line-height: var(--line-height-caption);
 }
 
 @media (max-width: 767px) {

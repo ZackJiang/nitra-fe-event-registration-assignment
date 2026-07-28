@@ -37,12 +37,12 @@
   border-radius: var(--radius-lg);
   background: var(--bg-info-subtle-rest);
   color: var(--text-neutral-default);
-  font-size: 14px;
-  line-height: 20px;
+  font-size: var(--font-size-control);
+  line-height: var(--line-height-control);
 }
 
 .addon-step__shipping-banner :deep(.q-banner__avatar) {
-  min-width: 20px;
+  min-width: var(--icon-size-lg);
   color: var(--text-info-default);
 }
 
@@ -63,7 +63,7 @@
 }
 
 .addon-step__tabs {
-  min-height: 40px;
+  min-height: var(--control-height-md);
   max-width: 100%;
   align-self: flex-start;
   padding: var(--space-2xs);
@@ -72,11 +72,11 @@
 }
 
 .addon-step__tab {
-  min-height: 32px;
+  min-height: var(--control-height-sm);
   padding: 0 var(--space-xl);
   border-radius: var(--radius-lg);
   color: var(--text-neutral-muted);
-  font-size: 13px;
+  font-size: var(--font-size-tab);
   font-weight: 570;
 }
 

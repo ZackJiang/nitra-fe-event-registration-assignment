@@ -96,7 +96,7 @@ defineExpose({
 
 .registration-success__hero {
   display: flex;
-  width: min(100%, 720px);
+  width: min(100%, var(--wizard-success-content-max-width));
   flex-direction: column;
   align-items: center;
   gap: var(--space-md);
@@ -105,8 +105,8 @@ defineExpose({
 
 .registration-success__icon {
   display: block;
-  width: 80px;
-  height: 80px;
+  width: var(--wizard-success-icon-size);
+  height: var(--wizard-success-icon-size);
 }
 
 .registration-success__heading,
@@ -138,12 +138,12 @@ defineExpose({
 }
 
 .registration-success__button {
-  min-height: 40px;
+  min-height: var(--control-height-md);
   margin-top: var(--space-xs);
   border-radius: var(--radius-control);
-  font-size: 14px;
+  font-size: var(--font-size-control);
   font-weight: 610;
-  line-height: 20px;
+  line-height: var(--line-height-control);
 }
 
 @media (max-width: 767px) {
@@ -153,8 +153,8 @@ defineExpose({
   }
 
   .registration-success__icon {
-    width: 64px;
-    height: 64px;
+    width: var(--wizard-success-icon-size-mobile);
+    height: var(--wizard-success-icon-size-mobile);
   }
 }
 </style>

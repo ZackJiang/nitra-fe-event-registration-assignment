@@ -6,7 +6,7 @@
   gap: var(--space-sm);
   overflow: hidden;
   padding: var(--space-lg);
-  border: 1px solid var(--border-neutral-muted);
+  border: var(--border-width-default) solid var(--border-neutral-muted);
   border-radius: var(--radius-lg);
   background: var(--bg-surface-l0);
   box-shadow: var(--shadow-card);
@@ -19,8 +19,8 @@
 }
 
 .merchandise-card--error {
-  padding: calc(var(--space-lg) - 1px);
-  border: 2px solid var(--border-danger-emphasis);
+  padding: calc(var(--space-lg) - var(--border-width-default));
+  border: var(--border-width-emphasis) solid var(--border-danger-emphasis);
   background: var(--bg-danger-subtle-rest);
 }
 
@@ -81,19 +81,19 @@
 }
 
 .merchandise-card__size-select {
-  width: 96px;
+  width: var(--merchandise-size-select-width);
   min-width: 0;
   font-size: var(--font-size-sm);
 }
 
 .merchandise-card__size-select :deep(.q-field__control),
 .merchandise-card__size-select :deep(.q-field__marginal) {
-  height: 28px;
-  min-height: 28px;
+  height: var(--control-height-xs);
+  min-height: var(--control-height-xs);
 }
 
 .merchandise-card__size-select :deep(.q-field__native) {
-  min-height: 28px;
+  min-height: var(--control-height-xs);
   padding: 0;
 }
 
@@ -103,8 +103,8 @@
 
 .merchandise-card__added,
 .merchandise-card__error-message {
-  font-size: 11px;
-  line-height: 14px;
+  font-size: var(--font-size-caption);
+  line-height: var(--line-height-caption);
 }
 
 .merchandise-card__added {
