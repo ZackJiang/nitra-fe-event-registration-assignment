@@ -107,6 +107,23 @@ function requestStep(stepId) {
   font-weight: 485;
 }
 
+/* Keep clickable step tabs visually neutral on pointer hover while preserving keyboard focus. */
+body.desktop .registration-stepper :deep(.q-hoverable:hover > .q-focus-helper) {
+  opacity: 0;
+}
+
+body.desktop .registration-stepper :deep(.q-focusable:focus > .q-focus-helper) {
+  opacity: 0;
+}
+
+body.desktop .registration-stepper :deep(.q-focusable:focus-visible > .q-focus-helper) {
+  opacity: 0.22;
+}
+
+.registration-stepper :deep(.q-stepper__tab > .q-ripple) {
+  display: none;
+}
+
 .registration-stepper :deep(.q-stepper__tab--active),
 .registration-stepper :deep(.q-stepper__tab--done) {
   color: var(--text-neutral-default) !important;
