@@ -124,15 +124,25 @@ describe('useRegistrationWizard', () => {
     expect(wizard.setAddonQuantity('merch1', 4)).toBe(false)
     expect(wizard.setAddonQuantity('merch1', 2)).toBe(true)
     expect(wizard.hasSelectedMerchandise.value).toBe(true)
+    expect(wizard.addonSelections.merch1.size).toBe('S')
     expect(wizard.setAddonSize('merch1', 'M')).toBe(true)
     expect(wizard.setAddonSize('merch1', 'invalid')).toBe(false)
     expect(wizard.addonSelections.merch1.size).toBe('M')
+
+    expect(wizard.setAddonQuantity('merch1', 3)).toBe(true)
+    expect(wizard.addonSelections.merch1.size).toBe('M')
+
+    expect(wizard.setAddonQuantity('merch2', 1)).toBe(true)
+    expect(wizard.addonSelections.merch2.size).toBeNull()
 
     expect(wizard.setAddonQuantity('merch1', 0)).toBe(true)
     expect(wizard.addonSelections.merch1).toEqual({
       quantity: 0,
       size: null,
     })
+
+    expect(wizard.setAddonQuantity('merch1', 1)).toBe(true)
+    expect(wizard.addonSelections.merch1.size).toBe('S')
   })
 
   it('hides validation before submit and automatically clears corrected errors', () => {

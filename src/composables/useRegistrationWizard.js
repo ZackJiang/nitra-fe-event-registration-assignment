@@ -344,6 +344,16 @@ export function useRegistrationWizard({
     }
 
     selection.quantity = quantity
+
+    if (
+      addon.category === 'merchandise'
+      && selection.size === null
+      && Array.isArray(addon.sizes)
+      && addon.sizes.length > 0
+    ) {
+      selection.size = addon.sizes[0]
+    }
+
     return true
   }
 
