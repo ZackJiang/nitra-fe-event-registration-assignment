@@ -1,5 +1,6 @@
 <script setup>
 import { nextTick, ref } from 'vue'
+import { useI18n } from 'vue-i18n'
 import TicketCard from './TicketCard.vue'
 
 defineProps({
@@ -22,6 +23,7 @@ const groupName = 'registration-ticket-type'
 const headingId = 'ticket-selection-heading'
 const errorMessageId = 'ticket-selection-error'
 const ticketCards = ref([])
+const { t } = useI18n()
 
 function focusFirstTicket() {
   const firstTicket = ticketCards.value[0]
@@ -93,7 +95,7 @@ defineExpose({
       class="ticket-selection__heading"
       tabindex="-1"
     >
-      Select Ticket Type
+      {{ t('attendee.selectTicketType') }}
     </h2>
 
     <div
@@ -124,7 +126,7 @@ defineExpose({
       class="ticket-selection__error"
       role="alert"
     >
-      {{ issue.message }}
+      {{ t(`validation['${issue.code}']`, issue.params) }}
     </p>
   </section>
 </template>

@@ -6,11 +6,7 @@ import {
 import { WIZARD_STEP } from '../constants/wizard.js'
 
 const REQUIRED_ATTENDEE_FIELDS = Object.freeze([
-  ['fullName', 'Full name'],
-  ['email', 'Email'],
-  ['phone', 'Phone'],
-  ['company', 'Company'],
-  ['jobTitle', 'Job title'],
+  'fullName', 'email', 'phone', 'company', 'jobTitle',
 ])
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
@@ -55,7 +51,6 @@ export function validateRegistration({
       WIZARD_STEP.ATTENDEE,
       'field',
       ['shippingAddress'],
-      'Shipping address is required when merchandise is selected.',
     ))
   }
 
@@ -86,14 +81,13 @@ export function hasSelectedMerchandise(selections, addons) {
  * @param {import('../types/registration.js').ValidationIssue[]} issues
  */
 function validateAttendee(attendee, issues) {
-  REQUIRED_ATTENDEE_FIELDS.forEach(([fieldId, fieldLabel]) => {
+  REQUIRED_ATTENDEE_FIELDS.forEach((fieldId) => {
     if (!hasText(attendee[fieldId])) {
       issues.push(createIssue(
         `attendee.${fieldId}.required`,
         WIZARD_STEP.ATTENDEE,
         'field',
         [fieldId],
-        `${fieldLabel} is required.`,
       ))
     }
   })
@@ -104,7 +98,6 @@ function validateAttendee(attendee, issues) {
       WIZARD_STEP.ATTENDEE,
       'field',
       ['email'],
-      'Enter a valid email address.',
     ))
   }
 
@@ -118,7 +111,6 @@ function validateAttendee(attendee, issues) {
         1,
         'field',
         ['phone'],
-        'Enter a valid phone number with 7 to 15 digits.',
       ))
     }
   }
@@ -136,7 +128,6 @@ function validateTicket(ticketTypeId, ticketTypes, issues) {
       WIZARD_STEP.ATTENDEE,
       'ticket',
       [],
-      'Select a ticket type.',
     ))
     return
   }
@@ -147,7 +138,6 @@ function validateTicket(ticketTypeId, ticketTypes, issues) {
       WIZARD_STEP.ATTENDEE,
       'ticket',
       [ticketTypeId],
-      'The selected ticket type is unavailable.',
     ))
   }
 }
@@ -175,7 +165,6 @@ function validateSessions(selectedSessionIds, sessions, issues) {
         WIZARD_STEP.SESSIONS,
         'session',
         [String(sessionId)],
-        'A selected session is unavailable.',
       ))
       return
     }
@@ -188,7 +177,6 @@ function validateSessions(selectedSessionIds, sessions, issues) {
         WIZARD_STEP.SESSIONS,
         'session',
         [session.id],
-        'A selected session is sold out.',
       ))
     }
   })
@@ -199,7 +187,6 @@ function validateSessions(selectedSessionIds, sessions, issues) {
       WIZARD_STEP.SESSIONS,
       'session',
       [firstId, secondId],
-      'Selected sessions have overlapping times.',
     ))
   })
 
@@ -220,7 +207,6 @@ function validateAddons(selections, addons, selectedSessions, issues) {
         WIZARD_STEP.ADDONS,
         'addon',
         [addonId],
-        'A selected add-on is unavailable.',
       ))
     }
   })
@@ -240,7 +226,6 @@ function validateAddons(selections, addons, selectedSessions, issues) {
         WIZARD_STEP.ADDONS,
         'addon',
         [addon.id],
-        'The selected add-on quantity is invalid.',
       ))
       return
     }
@@ -258,7 +243,6 @@ function validateAddons(selections, addons, selectedSessions, issues) {
         WIZARD_STEP.ADDONS,
         'addon',
         [addon.id],
-        'A selected workshop is sold out.',
       ))
     }
 
@@ -270,7 +254,6 @@ function validateAddons(selections, addons, selectedSessions, issues) {
             WIZARD_STEP.ADDONS,
             'addon',
             [addon.id, session.id],
-            'A selected workshop overlaps with a selected session.',
           ))
         }
       })
@@ -287,7 +270,6 @@ function validateAddons(selections, addons, selectedSessions, issues) {
         WIZARD_STEP.ADDONS,
         'addon',
         [addon.id],
-        'Select an available size for this merchandise item.',
       ))
     }
   })
@@ -306,15 +288,15 @@ function hasText(value) {
  * @param {1 | 2 | 3} stepId
  * @param {'field' | 'ticket' | 'session' | 'addon'} targetType
  * @param {string[]} targetIds
- * @param {string} message
+ * @param {Record<string, string | number>} [params]
  * @returns {import('../types/registration.js').ValidationIssue}
  */
-function createIssue(code, stepId, targetType, targetIds, message) {
+function createIssue(code, stepId, targetType, targetIds, params = {}) {
   return {
     code,
     stepId,
     targetType,
     targetIds,
-    message,
+    params,
   }
 }

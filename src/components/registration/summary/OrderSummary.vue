@@ -1,5 +1,6 @@
 <script setup>
 import { computed } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { formatUsd } from '../../../utils/registrationPricing.js'
 
 const props = defineProps({
@@ -9,11 +10,11 @@ const props = defineProps({
   },
   title: {
     type: String,
-    default: 'Order Summary',
+    default: '',
   },
   totalLabel: {
     type: String,
-    default: 'Total',
+    default: '',
   },
   variant: {
     type: String,
@@ -21,6 +22,9 @@ const props = defineProps({
     validator: (value) => ['sidebar', 'review'].includes(value),
   },
 })
+const { locale, t } = useI18n()
+const displayTitle = computed(() => props.title || t('summary.title'))
+const displayTotalLabel = computed(() => props.totalLabel || t('summary.total'))
 
 const hasItems = computed(() => (
   Boolean(props.pricingBreakdown.ticketLine)
@@ -28,12 +32,12 @@ const hasItems = computed(() => (
 ))
 
 function getTicketLabel(line) {
-  return line.label.endsWith('Ticket') ? line.label : `${line.label} Ticket`
+  return t('summary.ticket', { name: line.label })
 }
 
 function getAddonLabel(line) {
   return line.category === 'merchandise'
-    ? `${line.label} × ${line.quantity}`
+    ? t('summary.merchandise', { name: line.label, quantity: line.quantity })
     : line.label
 }
 </script>
@@ -51,14 +55,14 @@ function getAddonLabel(line) {
       id="order-summary-heading"
       class="order-summary__heading"
     >
-      {{ title }}
+      {{ displayTitle }}
     </h2>
 
     <p
       v-if="!hasItems"
       class="order-summary__empty"
     >
-      No items selected yet.
+      {{ t('summary.empty') }}
     </p>
 
     <div
@@ -66,7 +70,7 @@ function getAddonLabel(line) {
       class="order-summary__line"
     >
       <span>{{ getTicketLabel(pricingBreakdown.ticketLine) }}</span>
-      <span>{{ formatUsd(pricingBreakdown.ticketLine.lineTotalCents) }}</span>
+      <span>{{ formatUsd(pricingBreakdown.ticketLine.lineTotalCents, locale) }}</span>
     </div>
 
     <div
@@ -75,22 +79,22 @@ function getAddonLabel(line) {
       class="order-summary__line"
     >
       <span>{{ getAddonLabel(line) }}</span>
-      <span>{{ formatUsd(line.lineTotalCents) }}</span>
+      <span>{{ formatUsd(line.lineTotalCents, locale) }}</span>
     </div>
 
     <div
       v-if="pricingBreakdown.discountCents > 0"
       class="order-summary__line order-summary__discount"
     >
-      <span>Workshop discount (VIP 10%)</span>
-      <span>-{{ formatUsd(pricingBreakdown.discountCents) }}</span>
+      <span>{{ t('summary.workshopDiscount') }}</span>
+      <span>-{{ formatUsd(pricingBreakdown.discountCents, locale) }}</span>
     </div>
 
     <q-separator class="order-summary__separator" />
 
     <div class="order-summary__line order-summary__total">
-      <span>{{ totalLabel }}</span>
-      <span>{{ formatUsd(pricingBreakdown.totalCents) }}</span>
+      <span>{{ displayTotalLabel }}</span>
+      <span>{{ formatUsd(pricingBreakdown.totalCents, locale) }}</span>
     </div>
   </q-card>
 </template>

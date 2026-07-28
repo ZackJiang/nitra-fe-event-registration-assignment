@@ -2,7 +2,7 @@ import UnoCSS from 'unocss/vite'
 
 export default function () {
   return {
-    boot: ['unocss'],
+    boot: ['unocss', 'i18n'],
 
     css: ['app.scss'],
 

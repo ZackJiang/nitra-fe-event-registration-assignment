@@ -1,5 +1,6 @@
 <script setup>
 import { computed, nextTick, ref } from 'vue'
+import { useI18n } from 'vue-i18n'
 import AddonStep from '../components/registration/addons/AddonStep.vue'
 import AttendeeStep from '../components/registration/attendee/AttendeeStep.vue'
 import SessionStep from '../components/registration/sessions/SessionStep.vue'
@@ -43,6 +44,7 @@ const {
 const reviewStepRef = ref(null)
 const attendeeStepRef = ref(null)
 const successRef = ref(null)
+const { t } = useI18n()
 
 const isSubmissionSucceeded = computed(() => submission.status === 'succeeded')
 
@@ -53,8 +55,8 @@ const ticketTypeModel = computed({
 
 const primaryLabel = computed(() => (
   currentStep.value < WIZARD_STEP.REVIEW
-    ? `Next: ${WIZARD_STEPS[currentStep.value].label}`
-    : 'Submit Registration'
+    ? t('actions.nextToStep', { step: t(WIZARD_STEPS[currentStep.value].labelKey) })
+    : t('actions.submitRegistration')
 ))
 const isPrimaryDisabled = computed(() => (
   currentStep.value === WIZARD_STEP.REVIEW && isSubmitDisabled.value

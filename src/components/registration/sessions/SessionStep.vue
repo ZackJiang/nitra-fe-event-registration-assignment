@@ -1,5 +1,6 @@
 <script setup>
 import { computed, nextTick, onMounted, ref } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { WIZARD_STEP } from '../../../constants/wizard.js'
 import { formatUtcDate, isAtCapacity } from '../../../utils/registrationSchedule.js'
 import SessionCard from './SessionCard.vue'
@@ -25,6 +26,7 @@ const emit = defineEmits({
 
 const errorMessageId = 'session-selection-error'
 const sessionCardRefs = new Map()
+const { locale, t } = useI18n()
 
 const dateGroups = computed(() => (
   Object.entries(props.groupedSessions)
@@ -38,7 +40,7 @@ const activeSessions = computed(() => (
 const selectedSessionIdSet = computed(() => new Set(props.selectedSessionIds))
 const selectedCountLabel = computed(() => {
   const count = props.selectedSessionIds.length
-  return `${count} ${count === 1 ? 'session' : 'sessions'} selected`
+  return t(count === 1 ? 'sessions.countOne' : 'sessions.countOther', { count })
 })
 const sessionIssues = computed(() => (
   props.visibleIssues.filter((issue) => (
@@ -48,10 +50,13 @@ const sessionIssues = computed(() => (
 const invalidSessionIds = computed(() => new Set(
   sessionIssues.value.flatMap((issue) => issue.targetIds),
 ))
-const errorMessage = computed(() => sessionIssues.value[0]?.message ?? '')
+const errorMessage = computed(() => {
+  const issue = sessionIssues.value[0]
+  return issue ? t(`validation['${issue.code}']`, issue.params) : ''
+})
 
 function getDateLabel(sessions) {
-  return formatUtcDate(sessions[0]?.date)
+  return formatUtcDate(sessions[0]?.date, locale.value)
 }
 
 function isSelected(sessionId) {
@@ -109,7 +114,7 @@ defineExpose({
       id="session-selection-heading"
       class="session-step__heading"
     >
-      Select Sessions
+      {{ t('sessions.heading') }}
     </h1>
 
     <template v-if="dateGroups.length > 0">
@@ -123,7 +128,7 @@ defineExpose({
         outside-arrows
         mobile-arrows
         indicator-color="transparent"
-        aria-label="Session dates"
+        :aria-label="t('sessions.datesAria')"
       >
         <q-tab
           v-for="[dateKey, dateSessions] in dateGroups"
@@ -170,7 +175,7 @@ defineExpose({
       class="session-step__empty"
       role="status"
     >
-      No sessions are available.
+      {{ t('sessions.empty') }}
     </p>
   </section>
 </template>

@@ -1,5 +1,6 @@
 <script setup>
 import { nextTick, ref } from 'vue'
+import { useI18n } from 'vue-i18n'
 
 defineProps({
   issues: {
@@ -13,6 +14,7 @@ defineEmits({
 })
 
 const headingRef = ref(null)
+const { t } = useI18n()
 
 async function focus() {
   await nextTick()
@@ -35,7 +37,7 @@ defineExpose({
       class="review-error-banner__heading"
       tabindex="-1"
     >
-      Please fix the following errors before submitting
+      {{ t('review.fixErrors') }}
     </p>
 
     <ul class="review-error-banner__list">
@@ -49,7 +51,7 @@ defineExpose({
           dense
           no-caps
           type="button"
-          :label="`Step ${issue.stepId}: ${issue.message}`"
+          :label="t('review.stepError', { step: issue.stepId, message: t(`validation['${issue.code}']`, issue.params) })"
           @click="$emit('navigate', issue.stepId)"
         />
       </li>

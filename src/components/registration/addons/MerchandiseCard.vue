@@ -1,5 +1,6 @@
 <script setup>
 import { computed, ref } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { formatUsd, toCents } from '../../../utils/registrationPricing.js'
 import QuantityPicker from './QuantityPicker.vue'
 
@@ -37,12 +38,13 @@ const emit = defineEmits({
 
 const quantityPickerRef = ref(null)
 const sizeSelectRef = ref(null)
+const { locale, t } = useI18n()
 
 const isSelected = computed(() => props.selection.quantity > 0)
 const hasSizes = computed(() => (
   Array.isArray(props.addon.sizes) && props.addon.sizes.length > 0
 ))
-const priceLabel = computed(() => formatUsd(toCents(props.addon.price)))
+const priceLabel = computed(() => formatUsd(toCents(props.addon.price), locale.value))
 const quantityModel = computed({
   get: () => props.selection.quantity,
   set: (quantity) => emit('set-quantity', props.addon.id, quantity),
@@ -95,11 +97,11 @@ defineExpose({
         v-if="hasSizes"
         class="merchandise-card__size"
         role="group"
-        :aria-label="`${addon.name} size`"
+        :aria-label="t('addons.sizeAria', { name: addon.name })"
         :aria-invalid="hasError ? 'true' : undefined"
         :aria-describedby="hasError ? errorMessageId : undefined"
       >
-        <span class="merchandise-card__size-label">Size:</span>
+        <span class="merchandise-card__size-label">{{ t('addons.size') }}</span>
         <q-select
           ref="sizeSelectRef"
           v-model="sizeModel"
@@ -112,8 +114,8 @@ defineExpose({
           :error="hasError"
           hide-bottom-space
           hide-dropdown-icon
-          placeholder="Select"
-          :aria-label="`Select ${addon.name} size`"
+          :placeholder="t('addons.selectSize')"
+          :aria-label="t('addons.selectSizeAria', { name: addon.name })"
           :aria-invalid="hasError ? 'true' : undefined"
           :aria-describedby="hasError ? errorMessageId : undefined"
         >
@@ -139,7 +141,7 @@ defineExpose({
       class="merchandise-card__added"
       role="status"
     >
-      ✓ Added to order
+      {{ t('addons.added') }}
     </p>
 
     <p

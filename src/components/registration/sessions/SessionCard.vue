@@ -1,5 +1,6 @@
 <script setup>
 import { computed, ref } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { getSessionTrackTone } from '../../../constants/sessions.js'
 import {
   formatUtcTimeRange,
@@ -35,6 +36,7 @@ const emit = defineEmits({
 })
 
 const checkboxRef = ref(null)
+const { locale, t } = useI18n()
 
 const isInteractive = computed(() => !props.soldOut || props.selected)
 const trackTone = computed(() => getSessionTrackTone(props.session.track))
@@ -43,7 +45,7 @@ const speakerLine = computed(() => (
   [props.session.speaker, props.session.speakerTitle].filter(Boolean).join(', ')
 ))
 const timeRange = computed(() => (
-  formatUtcTimeRange(props.session.date, props.session.endDate)
+  formatUtcTimeRange(props.session.date, props.session.endDate, locale.value)
 ))
 const utilization = computed(() => (
   getCapacityUtilization(props.session.capacity, props.session.registered)
@@ -68,14 +70,15 @@ const capacityTone = computed(() => {
 })
 const capacityLabel = computed(() => {
   if (props.soldOut) {
-    return 'Sold Out'
+    return t('sessions.soldOut')
   }
 
-  return `${remainingSpots.value} ${remainingSpots.value === 1 ? 'spot' : 'spots'} left`
+  return t(remainingSpots.value === 1 ? 'sessions.spotLeftOne' : 'sessions.spotLeftOther', { count: remainingSpots.value })
 })
 const accessibleLabel = computed(() => {
-  const selectionAction = props.selected ? 'Deselect' : 'Select'
-  return `${selectionAction} ${props.session.title}. ${capacityLabel.value}.`
+  return t('sessions.selectAria', {
+    action: t(props.selected ? 'sessions.deselect' : 'sessions.select'), title: props.session.title, capacity: capacityLabel.value,
+  })
 })
 
 function toggleSession() {
@@ -173,7 +176,7 @@ defineExpose({
       rounded
       size="var(--space-xs)"
       :value="utilization"
-      :aria-label="`${capacityLabel}, ${Math.round(utilization * 100)}% capacity used`"
+      :aria-label="t('sessions.capacityAria', { capacity: capacityLabel, percent: Math.round(utilization * 100) })"
     />
 
     <p

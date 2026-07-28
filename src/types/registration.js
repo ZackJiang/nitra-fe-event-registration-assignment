@@ -48,7 +48,7 @@
  * @property {1 | 2 | 3} stepId
  * @property {'field' | 'ticket' | 'session' | 'addon'} targetType
  * @property {string[]} targetIds
- * @property {string} message
+ * @property {Record<string, string | number>} params
  */
 
 /**

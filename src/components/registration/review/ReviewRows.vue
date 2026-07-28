@@ -1,4 +1,7 @@
 <script setup>
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
 defineProps({
   rows: {
     type: Array,
@@ -44,7 +47,7 @@ defineProps({
     :key="`${issue.code}:${issue.targetIds.join(':')}`"
     class="review-rows__issue"
   >
-    {{ issue.message }}
+    {{ t(`validation['${issue.code}']`, issue.params) }}
   </p>
 </template>
 

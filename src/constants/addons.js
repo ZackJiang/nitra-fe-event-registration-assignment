@@ -1,15 +1,15 @@
 export const ADDON_CATEGORIES = Object.freeze([
   {
     id: 'workshop',
-    label: 'Workshops',
+    labelKey: 'addons.categories.workshop',
   },
   {
     id: 'meal',
-    label: 'Meal Packages',
+    labelKey: 'addons.categories.meal',
   },
   {
     id: 'merchandise',
-    label: 'Merchandise',
+    labelKey: 'addons.categories.merchandise',
   },
 ])
 

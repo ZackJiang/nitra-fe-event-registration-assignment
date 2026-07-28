@@ -14,13 +14,13 @@ export const WIZARD_STEP = Object.freeze({
 /**
  * Ordered wizard step metadata shared by the shell and registration state.
  *
- * @type {ReadonlyArray<{ id: number, label: string }>}
+ * @type {ReadonlyArray<{ id: number, labelKey: string }>}
  */
 export const WIZARD_STEPS = Object.freeze([
-  Object.freeze({ id: WIZARD_STEP.ATTENDEE, label: 'Attendee Info' }),
-  Object.freeze({ id: WIZARD_STEP.SESSIONS, label: 'Sessions' }),
-  Object.freeze({ id: WIZARD_STEP.ADDONS, label: 'Add-ons' }),
-  Object.freeze({ id: WIZARD_STEP.REVIEW, label: 'Review' }),
+  Object.freeze({ id: WIZARD_STEP.ATTENDEE, labelKey: 'wizard.steps.attendee' }),
+  Object.freeze({ id: WIZARD_STEP.SESSIONS, labelKey: 'wizard.steps.sessions' }),
+  Object.freeze({ id: WIZARD_STEP.ADDONS, labelKey: 'wizard.steps.addons' }),
+  Object.freeze({ id: WIZARD_STEP.REVIEW, labelKey: 'wizard.steps.review' }),
 ])
 
 /**

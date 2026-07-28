@@ -1,11 +1,6 @@
 <script setup>
 import { ref } from 'vue'
-
-const USD_WHOLE_FORMATTER = new Intl.NumberFormat('en-US', {
-  style: 'currency',
-  currency: 'USD',
-  maximumFractionDigits: 0,
-})
+import { useI18n } from 'vue-i18n'
 
 const props = defineProps({
   ticket: {
@@ -39,9 +34,12 @@ const emit = defineEmits({
 })
 
 const radioRef = ref(null)
+const { locale, t } = useI18n()
 
 function formatTicketPrice(price) {
-  return USD_WHOLE_FORMATTER.format(
+  return new Intl.NumberFormat(locale.value, {
+    style: 'currency', currency: 'USD', currencyDisplay: 'narrowSymbol', maximumFractionDigits: 0,
+  }).format(
     typeof price === 'number' && Number.isFinite(price) ? price : 0,
   )
 }
@@ -78,7 +76,7 @@ defineExpose({
       :name="groupName"
       :tabindex="tabIndex"
       :data-ticket-id="ticket.id"
-      :aria-label="`${ticket.name} ticket, ${formatTicketPrice(ticket.price)}`"
+      :aria-label="t('attendee.ticketAria', { name: ticket.name, price: formatTicketPrice(ticket.price) })"
       :aria-invalid="hasError ? 'true' : undefined"
       :aria-describedby="hasError ? errorMessageId : undefined"
       @update:model-value="emit('select', ticket.id)"
@@ -113,7 +111,7 @@ defineExpose({
       class="ticket-card__selected-badge"
       color="positive"
       rounded
-      label="✓ Selected"
+      :label="t('attendee.selected')"
     />
   </q-card>
 </template>

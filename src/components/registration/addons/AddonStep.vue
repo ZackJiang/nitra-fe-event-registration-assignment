@@ -1,5 +1,6 @@
 <script setup>
 import { computed, nextTick, onMounted, ref } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { ADDON_CATEGORIES } from '../../../constants/addons.js'
 import { WIZARD_STEP } from '../../../constants/wizard.js'
 import OrderSummary from '../summary/OrderSummary.vue'
@@ -48,6 +49,7 @@ const emit = defineEmits({
 
 const activeCategory = ref(ADDON_CATEGORIES[0].id)
 const addonCardRefs = new Map()
+const { t } = useI18n()
 
 const activeAddons = computed(() => (
   props.groupedAddons[activeCategory.value] ?? []
@@ -144,7 +146,7 @@ defineExpose({
         id="addon-selection-heading"
         class="addon-step__heading"
       >
-        Select Add-ons
+      {{ t('addons.heading') }}
       </h1>
 
       <q-tabs
@@ -157,14 +159,14 @@ defineExpose({
         outside-arrows
         mobile-arrows
         indicator-color="transparent"
-        aria-label="Add-on categories"
+        :aria-label="t('addons.categoriesAria')"
       >
         <q-tab
           v-for="category in ADDON_CATEGORIES"
           :key="category.id"
           class="addon-step__tab"
           :name="category.id"
-          :label="category.label"
+          :label="t(category.labelKey)"
         />
       </q-tabs>
 
@@ -180,10 +182,9 @@ defineExpose({
           />
         </template>
 
-        <strong>Shipping Information</strong>
+        <strong>{{ t('addons.shippingTitle') }}</strong>
         <span>
-          Merchandise items will be shipped to your address one week before the conference.
-          Please ensure your shipping address in Step 1 is correct.
+          {{ t('addons.shippingMessage') }}
         </span>
       </q-banner>
 
@@ -198,7 +199,7 @@ defineExpose({
           :addon="addon"
           :selection="getSelection(addon.id)"
           :has-error="Boolean(getIssue(addon.id))"
-          :error-message="getIssue(addon.id)?.message"
+          :error-message="getIssue(addon.id) ? t(`validation['${getIssue(addon.id).code}']`, getIssue(addon.id).params) : ''"
           :error-message-id="`addon-${addon.id}-error`"
           @set-quantity="setAddonQuantity"
           @set-size="setAddonSize"
@@ -212,7 +213,7 @@ defineExpose({
           :selected="isSelected(addon.id)"
           :availability="getAvailability(addon.id)"
           :has-error="Boolean(getIssue(addon.id))"
-          :error-message="getIssue(addon.id)?.message"
+          :error-message="getIssue(addon.id) ? t(`validation['${getIssue(addon.id).code}']`, getIssue(addon.id).params) : ''"
           :error-message-id="`addon-${addon.id}-error`"
           @update-selected="requestSelection"
         />
@@ -223,7 +224,7 @@ defineExpose({
         class="addon-step__empty"
         role="status"
       >
-        No add-ons are available in this category.
+      {{ t('addons.empty') }}
       </p>
     </div>
 

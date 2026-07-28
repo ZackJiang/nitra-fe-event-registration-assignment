@@ -1,5 +1,6 @@
 <script setup>
 import { computed } from 'vue'
+import { useI18n } from 'vue-i18n'
 
 const props = defineProps({
   fieldIssues: {
@@ -18,6 +19,7 @@ const phone = defineModel('phone', { type: String, required: true })
 const company = defineModel('company', { type: String, required: true })
 const jobTitle = defineModel('jobTitle', { type: String, required: true })
 const shippingAddress = defineModel('shippingAddress', { type: String, required: true })
+const { t } = useI18n()
 
 const fieldModels = {
   fullName,
@@ -31,48 +33,48 @@ const fieldModels = {
 const fieldDefinitions = computed(() => [
   {
     id: 'fullName',
-    label: 'Full Name',
+    label: t('attendee.fields.fullName.label'),
     type: 'text',
     autocomplete: 'name',
-    placeholder: 'Enter your full name',
+    placeholder: t('attendee.fields.fullName.placeholder'),
   },
   {
     id: 'email',
-    label: 'Email',
+    label: t('attendee.fields.email.label'),
     type: 'email',
     autocomplete: 'email',
-    placeholder: 'Enter your email address',
+    placeholder: t('attendee.fields.email.placeholder'),
   },
   {
     id: 'phone',
-    label: 'Phone',
+    label: t('attendee.fields.phone.label'),
     type: 'tel',
     autocomplete: 'tel',
-    placeholder: 'Enter your phone number',
+    placeholder: t('attendee.fields.phone.placeholder'),
   },
   {
     id: 'company',
-    label: 'Company',
+    label: t('attendee.fields.company.label'),
     type: 'text',
     autocomplete: 'organization',
-    placeholder: 'Enter your company name',
+    placeholder: t('attendee.fields.company.placeholder'),
   },
   {
     id: 'jobTitle',
-    label: 'Job Title',
+    label: t('attendee.fields.jobTitle.label'),
     type: 'text',
     autocomplete: 'organization-title',
-    placeholder: 'Enter your job title',
+    placeholder: t('attendee.fields.jobTitle.placeholder'),
     wide: true,
   },
   {
     id: 'shippingAddress',
     label: props.shippingRequired
-      ? 'Shipping Address'
-      : 'Shipping Address (Optional)',
+      ? t('attendee.fields.shippingAddress.label')
+      : t('attendee.fields.shippingAddress.optionalLabel'),
     type: 'text',
     autocomplete: 'street-address',
-    placeholder: 'Enter your shipping address',
+    placeholder: t('attendee.fields.shippingAddress.placeholder'),
     wide: true,
   },
 ])
@@ -110,7 +112,7 @@ defineExpose({
       id="attendee-information-heading"
       class="attendee-information__heading"
     >
-      Attendee Information
+      {{ t('attendee.information') }}
     </h2>
 
     <q-form
@@ -144,7 +146,7 @@ defineExpose({
           :autocomplete="field.autocomplete"
           :placeholder="field.placeholder"
           :error="Boolean(fieldIssues[field.id])"
-          :error-message="fieldIssues[field.id]?.message"
+          :error-message="fieldIssues[field.id] ? t(`validation['${fieldIssues[field.id].code}']`, fieldIssues[field.id].params) : ''"
           :aria-invalid="fieldIssues[field.id] ? 'true' : undefined"
           @update:model-value="fieldModels[field.id].value = $event"
         />

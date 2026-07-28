@@ -1,5 +1,6 @@
 <script setup>
 import { computed } from 'vue'
+import { useI18n } from 'vue-i18n'
 import errorStepIcon from '../../../assets/brand/stepper-error.svg'
 import { isWizardStepId, WIZARD_STEPS } from '../../../constants/wizard.js'
 
@@ -27,6 +28,7 @@ const currentStep = defineModel('currentStep', {
 
 const errorSteps = computed(() => new Set(props.errorStepIds))
 const errorIcon = `img:${errorStepIcon}`
+const { t } = useI18n()
 
 function canNavigateTo(stepId) {
   return stepId <= currentStep.value || errorSteps.value.has(stepId)
@@ -62,7 +64,7 @@ function requestStep(stepId) {
         v-for="step in steps"
         :key="step.id"
         :name="step.id"
-        :title="step.label"
+        :title="t(step.labelKey)"
         :prefix="step.id"
         :done="step.id < currentStep && !errorSteps.has(step.id)"
         :error="errorSteps.has(step.id)"

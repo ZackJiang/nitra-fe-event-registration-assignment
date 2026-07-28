@@ -1,5 +1,6 @@
 <script setup>
 import { computed, ref } from 'vue'
+import { useI18n } from 'vue-i18n'
 
 const props = defineProps({
   max: {
@@ -21,6 +22,7 @@ const quantity = defineModel({
 
 const decreaseButtonRef = ref(null)
 const increaseButtonRef = ref(null)
+const { t } = useI18n()
 
 const canDecrease = computed(() => quantity.value > 0)
 const canIncrease = computed(() => (
@@ -61,9 +63,9 @@ defineExpose({
   <div
     class="quantity-picker"
     role="group"
-    :aria-label="`${itemName} quantity`"
+    :aria-label="t('addons.quantityAria', { name: itemName })"
   >
-    <span class="quantity-picker__label">Qty:</span>
+    <span class="quantity-picker__label">{{ t('addons.quantity') }}</span>
 
     <q-btn
       ref="decreaseButtonRef"
@@ -73,7 +75,7 @@ defineExpose({
       round
       icon="remove"
       :disable="!canDecrease"
-      :aria-label="`Decrease ${itemName} quantity`"
+      :aria-label="t('addons.decreaseQuantity', { name: itemName })"
       @click="decrease"
     />
 
@@ -92,11 +94,11 @@ defineExpose({
       round
       icon="add"
       :disable="!canIncrease"
-      :aria-label="`Increase ${itemName} quantity`"
+      :aria-label="t('addons.increaseQuantity', { name: itemName })"
       @click="increase"
     />
 
-    <span class="quantity-picker__max">max {{ max }}</span>
+    <span class="quantity-picker__max">{{ t('addons.max', { max }) }}</span>
   </div>
 </template>
 

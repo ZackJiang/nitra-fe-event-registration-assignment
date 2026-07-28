@@ -1,10 +1,8 @@
 import { computed } from 'vue'
-import { ADDON_CATEGORIES } from '../constants/addons.js'
+import { useI18n } from 'vue-i18n'
 import { WIZARD_STEP } from '../constants/wizard.js'
 import { formatUsd } from '../utils/registrationPricing.js'
 import { formatUtcDate, formatUtcTimeRange } from '../utils/registrationSchedule.js'
-
-const CATEGORY_LABELS = new Map(ADDON_CATEGORIES.map(({ id, label }) => [id, label]))
 
 /**
  * Build display-ready review data without duplicating registration business rules.
@@ -20,6 +18,7 @@ const CATEGORY_LABELS = new Map(ADDON_CATEGORIES.map(({ id, label }) => [id, lab
  * @returns {Object}
  */
 export function useRegistrationReview(input) {
+  const { locale, t } = useI18n()
   const issuesByStep = computed(() => input.visibleIssues.reduce((issues, issue) => {
     if (!issues[issue.stepId]) {
       issues[issue.stepId] = []
@@ -36,16 +35,16 @@ export function useRegistrationReview(input) {
   ))
   const attendeeRows = computed(() => {
     const rows = [
-      createFieldRow('fullName', 'Name'),
-      createFieldRow('email', 'Email'),
-      createFieldRow('phone', 'Phone'),
-      createFieldRow('company', 'Company'),
-      createFieldRow('jobTitle', 'Job Title'),
+      createFieldRow('fullName'),
+      createFieldRow('email'),
+      createFieldRow('phone'),
+      createFieldRow('company'),
+      createFieldRow('jobTitle'),
       createTicketRow(),
     ]
 
     if (input.hasSelectedMerchandise || hasText(input.attendee.shippingAddress)) {
-      rows.push(createFieldRow('shippingAddress', 'Shipping Address', true))
+      rows.push(createFieldRow('shippingAddress', true))
     }
 
     return rows
@@ -54,18 +53,18 @@ export function useRegistrationReview(input) {
     .sort((first, second) => new Date(first.date).getTime() - new Date(second.date).getTime())
     .map((session) => ({
       id: session.id,
-      label: getSessionDateTime(session),
+      label: getSessionDateTime(session, locale.value),
       value: session.title,
       hasError: hasIssueForTarget(sessionIssues.value, session.id),
     })))
   const addonRows = computed(() => input.selectedAddons.map(({ addon, selection }) => ({
     id: addon.id,
-    label: CATEGORY_LABELS.get(addon.category) ?? 'Add-on',
+    label: t(`addons.categories.${addon.category}`),
     value: getAddonLabel(addon, selection),
     hasError: hasIssueForTarget(addonIssues.value, addon.id),
   })))
 
-  function createFieldRow(fieldId, label, requiredForMerchandise = false) {
+  function createFieldRow(fieldId, requiredForMerchandise = false) {
     const issue = attendeeIssues.value.find((candidate) => (
       candidate.targetType === 'field' && candidate.targetIds.includes(fieldId)
     ))
@@ -73,7 +72,7 @@ export function useRegistrationReview(input) {
 
     return {
       id: fieldId,
-      label,
+      label: t(`review.fields.${fieldId}`),
       value: getFieldDisplay(value, issue, requiredForMerchandise),
       hasError: Boolean(issue),
     }
@@ -85,10 +84,10 @@ export function useRegistrationReview(input) {
 
     return {
       id: 'ticketType',
-      label: 'Ticket Type',
+      label: t('review.fields.ticketType'),
       value: input.selectedTicket
-        ? `${input.selectedTicket.name} (${formatUsd(totalCents)})`
-        : issue ? '— (required)' : '—',
+        ? `${input.selectedTicket.name} (${formatUsd(totalCents, locale.value)})`
+        : issue ? t('review.required') : t('review.empty'),
       hasError: Boolean(issue),
     }
   }
@@ -97,8 +96,14 @@ export function useRegistrationReview(input) {
     const line = addonLinesById.value.get(addon.id)
     const quantityLabel = addon.category === 'merchandise' ? ` × ${selection.quantity}` : ''
     const sizeLabel = selection.size ? ` (${selection.size})` : ''
-    const priceLabel = line ? ` (${formatUsd(line.lineTotalCents)})` : ''
+    const priceLabel = line ? ` (${formatUsd(line.lineTotalCents, locale.value)})` : ''
     return `${addon.name}${quantityLabel}${sizeLabel}${priceLabel}`
+  }
+
+  function getFieldDisplay(value, issue, requiredForMerchandise) {
+    if (!issue) return value || t('review.empty')
+    if (hasText(value)) return value
+    return requiredForMerchandise ? t('review.requiredForMerchandise') : t('review.required')
   }
 
   return {
@@ -119,23 +124,9 @@ function hasIssueForTarget(issues, targetId) {
   return issues.some((issue) => issue.targetIds.includes(targetId))
 }
 
-function getFieldDisplay(value, issue, requiredForMerchandise) {
-  if (!issue) {
-    return value || '—'
-  }
-
-  if (!hasText(value)) {
-    return requiredForMerchandise
-      ? '— (required for merchandise)'
-      : '— (required)'
-  }
-
-  return value
-}
-
-function getSessionDateTime(session) {
+function getSessionDateTime(session, locale) {
   return [
-    formatUtcDate(session.date),
-    formatUtcTimeRange(session.date, session.endDate),
+    formatUtcDate(session.date, locale),
+    formatUtcTimeRange(session.date, session.endDate, locale),
   ].filter(Boolean).join(', ')
 }

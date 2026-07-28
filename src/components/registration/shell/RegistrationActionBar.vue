@@ -1,4 +1,7 @@
 <script setup>
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
 defineProps({
   showBack: {
     type: Boolean,
@@ -35,7 +38,7 @@ defineEmits({
         class="registration-action-bar__back wizard-focus-ring"
         unelevated
         no-caps
-        label="Back"
+        :label="t('actions.back')"
         @click="$emit('back')"
       />
 

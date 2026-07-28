@@ -1,16 +1,3 @@
-const UTC_DATE_FORMATTER = new Intl.DateTimeFormat('en-US', {
-  month: 'short',
-  day: 'numeric',
-  timeZone: 'UTC',
-})
-
-const UTC_TIME_FORMATTER = new Intl.DateTimeFormat('en-US', {
-  hour: 'numeric',
-  minute: '2-digit',
-  hour12: true,
-  timeZone: 'UTC',
-})
-
 /**
  * Convert an ISO timestamp into its UTC date key.
  *
@@ -69,11 +56,14 @@ export function groupItemsByUtcDate(items, startKey = /** @type {keyof T} */ ('d
  * Format a timestamp as a short UTC date label.
  *
  * @param {unknown} timestamp
+ * @param {string} [locale='en-US']
  * @returns {string}
  */
-export function formatUtcDate(timestamp) {
+export function formatUtcDate(timestamp, locale = 'en-US') {
   const milliseconds = toTimestamp(timestamp)
-  return milliseconds === null ? '' : UTC_DATE_FORMATTER.format(milliseconds)
+  return milliseconds === null ? '' : new Intl.DateTimeFormat(locale, {
+    month: 'short', day: 'numeric', timeZone: 'UTC',
+  }).format(milliseconds)
 }
 
 /**
@@ -81,9 +71,10 @@ export function formatUtcDate(timestamp) {
  *
  * @param {unknown} start
  * @param {unknown} end
+ * @param {string} [locale='en-US']
  * @returns {string}
  */
-export function formatUtcTimeRange(start, end) {
+export function formatUtcTimeRange(start, end, locale = 'en-US') {
   const startMilliseconds = toTimestamp(start)
   const endMilliseconds = toTimestamp(end)
 
@@ -91,7 +82,10 @@ export function formatUtcTimeRange(start, end) {
     return ''
   }
 
-  return `${UTC_TIME_FORMATTER.format(startMilliseconds)} – ${UTC_TIME_FORMATTER.format(endMilliseconds)}`
+  const formatter = new Intl.DateTimeFormat(locale, {
+    hour: 'numeric', minute: '2-digit', hour12: locale === 'en-US', timeZone: 'UTC',
+  })
+  return `${formatter.format(startMilliseconds)} – ${formatter.format(endMilliseconds)}`
 }
 
 /**

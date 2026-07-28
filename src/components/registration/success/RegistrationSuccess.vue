@@ -1,5 +1,8 @@
 <script setup>
+import { useI18n } from 'vue-i18n'
 import successIconUrl from '../../../assets/brand/registration-success.svg'
+
+const { t } = useI18n()
 
 defineProps({
   eventName: {
@@ -58,17 +61,16 @@ defineExpose({
         class="registration-success__heading"
         tabindex="-1"
       >
-        Registration Complete!
+        {{ t('success.title') }}
       </h1>
 
       <p class="registration-success__confirmation">
-        Confirmation #{{ confirmationId }}
+        {{ t('success.confirmation', { id: confirmationId }) }}
       </p>
 
       <p class="registration-success__message">
-        Thank you, {{ attendee.fullName }}! Your {{ selectedTicket.name }} registration for
-        {{ eventName }} is confirmed.<br>
-        You will receive a confirmation email at {{ attendee.email }}.
+        {{ t('success.message', { name: attendee.fullName, ticket: selectedTicket.name, event: eventName }) }}<br>
+        {{ t('success.email', { email: attendee.email }) }}
       </p>
 
       <q-btn
@@ -76,7 +78,7 @@ defineExpose({
         unelevated
         no-caps
         color="accent"
-        label="Back to Home"
+        :label="t('actions.backToHome')"
         @click="emit('back-home')"
       />
     </div>

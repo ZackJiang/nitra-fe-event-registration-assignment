@@ -1,5 +1,6 @@
 <script setup>
 import { computed, ref } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { formatUsd, toCents } from '../../../utils/registrationPricing.js'
 import {
   formatUtcDate,
@@ -45,19 +46,20 @@ const emit = defineEmits({
 })
 
 const checkboxRef = ref(null)
+const { locale, t } = useI18n()
 
 const isWorkshop = computed(() => props.addon.category === 'workshop')
 const isInteractive = computed(() => (
   props.selected || !props.availability.isUnavailableForNewSelection
 ))
-const priceLabel = computed(() => formatUsd(toCents(props.addon.price)))
+const priceLabel = computed(() => formatUsd(toCents(props.addon.price), locale.value))
 const scheduleLabel = computed(() => {
   if (!isWorkshop.value) {
     return ''
   }
 
-  const dateLabel = formatUtcDate(props.addon.date)
-  const timeLabel = formatUtcTimeRange(props.addon.date, props.addon.endDate)
+  const dateLabel = formatUtcDate(props.addon.date, locale.value)
+  const timeLabel = formatUtcTimeRange(props.addon.date, props.addon.endDate, locale.value)
   return [dateLabel, timeLabel].filter(Boolean).join(', ')
 })
 const capacityLabel = computed(() => {
@@ -66,11 +68,11 @@ const capacityLabel = computed(() => {
   }
 
   if (props.availability.isSoldOut) {
-    return 'Sold Out'
+    return t('addons.soldOut')
   }
 
   const remaining = getRemainingCapacity(props.addon.capacity, props.addon.registered)
-  return `${remaining} ${remaining === 1 ? 'spot' : 'spots'} remaining`
+  return t(remaining === 1 ? 'addons.spotRemainingOne' : 'addons.spotRemainingOther', { count: remaining })
 })
 const conflictMessage = computed(() => {
   if (props.availability.conflictingSessionIds.length === 0) {
@@ -78,13 +80,13 @@ const conflictMessage = computed(() => {
   }
 
   return props.selected
-    ? 'Conflicts with a selected session. Deselect this workshop to continue.'
-    : 'Unavailable — conflicts with a selected session.'
+    ? t('addons.conflictSelected')
+    : t('addons.conflictUnavailable')
 })
 const accessibleLabel = computed(() => {
-  const action = props.selected ? 'Deselect' : 'Select'
+  const action = t(props.selected ? 'addons.deselect' : 'addons.select')
   const status = conflictMessage.value || capacityLabel.value
-  return [action, props.addon.name, status].filter(Boolean).join('. ')
+  return t('addons.selectAria', { action, name: props.addon.name, status })
 })
 
 function requestSelection() {

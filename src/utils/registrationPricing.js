@@ -1,8 +1,3 @@
-const USD_FORMATTER = new Intl.NumberFormat('en-US', {
-  style: 'currency',
-  currency: 'USD',
-})
-
 /**
  * Convert a dollar amount to integer cents.
  *
@@ -77,17 +72,22 @@ export function calculatePricingBreakdown({
 }
 
 /**
- * Format integer cents as US dollars.
+ * Format integer cents as US dollars using the requested display locale.
  *
  * @param {unknown} cents
+ * @param {string} [locale='en-US']
  * @returns {string}
  */
-export function formatUsd(cents) {
+export function formatUsd(cents, locale = 'en-US') {
   const normalizedCents = typeof cents === 'number' && Number.isFinite(cents)
     ? Math.max(Math.round(cents), 0)
     : 0
 
-  return USD_FORMATTER.format(normalizedCents / 100)
+  return new Intl.NumberFormat(locale, {
+    style: 'currency',
+    currency: 'USD',
+    currencyDisplay: 'narrowSymbol',
+  }).format(normalizedCents / 100)
 }
 
 /**

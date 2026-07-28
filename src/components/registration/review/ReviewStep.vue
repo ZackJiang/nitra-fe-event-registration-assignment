@@ -1,5 +1,6 @@
 <script setup>
 import { ref } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { useRegistrationReview } from '../../../composables/useRegistrationReview.js'
 import { WIZARD_STEP } from '../../../constants/wizard.js'
 import OrderSummary from '../summary/OrderSummary.vue'
@@ -43,6 +44,7 @@ const emit = defineEmits({
 })
 
 const errorBannerRef = ref(null)
+const { t } = useI18n()
 const {
   addonIssues,
   addonRows,
@@ -81,11 +83,11 @@ defineExpose({
       id="review-step-heading"
       class="review-step__heading"
     >
-      Review Your Registration
+      {{ t('review.title') }}
     </h1>
 
     <review-section
-      title="Attendee Information"
+      :title="t('review.attendee')"
       :step-id="WIZARD_STEP.ATTENDEE"
       :has-error="attendeeIssues.length > 0"
       @edit="navigateToStep"
@@ -94,35 +96,35 @@ defineExpose({
     </review-section>
 
     <review-section
-      title="Selected Sessions"
+      :title="t('review.sessions')"
       :step-id="WIZARD_STEP.SESSIONS"
       :has-error="sessionIssues.length > 0"
       @edit="navigateToStep"
     >
       <review-rows
         :rows="sessionRows"
-        empty-message="No sessions selected."
+        :empty-message="t('review.noSessions')"
         :issues="sessionIssues"
       />
     </review-section>
 
     <review-section
-      title="Add-ons"
+      :title="t('review.addons')"
       :step-id="WIZARD_STEP.ADDONS"
       :has-error="addonIssues.length > 0"
       @edit="navigateToStep"
     >
       <review-rows
         :rows="addonRows"
-        empty-message="No add-ons selected."
+        :empty-message="t('review.noAddons')"
         :issues="addonIssues"
       />
     </review-section>
 
     <order-summary
       :pricing-breakdown="pricingBreakdown"
-      title="Pricing Summary"
-      total-label="Grand Total"
+      :title="t('review.pricing')"
+      :total-label="t('review.grandTotal')"
       variant="review"
     />
   </section>

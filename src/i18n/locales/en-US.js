@@ -1,0 +1,55 @@
+export default {
+  actions: {
+    back: 'Back',
+    editStep: 'Edit → Step {step}',
+    nextToStep: 'Next: {step}',
+    submitRegistration: 'Submit Registration',
+    backToHome: 'Back to Home',
+  },
+  wizard: {
+    steps: { attendee: 'Attendee Info', sessions: 'Sessions', addons: 'Add-ons', review: 'Review' },
+  },
+  attendee: {
+    selectTicketType: 'Select Ticket Type',
+    information: 'Attendee Information',
+    selected: '✓ Selected',
+    ticketAria: '{name} ticket, {price}',
+    fields: {
+      fullName: { label: 'Full Name', placeholder: 'Enter your full name' },
+      email: { label: 'Email', placeholder: 'Enter your email address' },
+      phone: { label: 'Phone', placeholder: 'Enter your phone number' },
+      company: { label: 'Company', placeholder: 'Enter your company name' },
+      jobTitle: { label: 'Job Title', placeholder: 'Enter your job title' },
+      shippingAddress: { label: 'Shipping Address', optionalLabel: 'Shipping Address (Optional)', placeholder: 'Enter your shipping address' },
+    },
+  },
+  sessions: {
+    heading: 'Select Sessions', datesAria: 'Session dates', countOne: '{count} session selected', countOther: '{count} sessions selected',
+    empty: 'No sessions are available.', soldOut: 'Sold Out', spotLeftOne: '{count} spot left', spotLeftOther: '{count} spots left',
+    selectAria: '{action} {title}. {capacity}.', capacityAria: '{capacity}, {percent}% capacity used', select: 'Select', deselect: 'Deselect',
+  },
+  addons: {
+    heading: 'Select Add-ons', categoriesAria: 'Add-on categories', empty: 'No add-ons are available in this category.',
+    shippingTitle: 'Shipping Information', shippingMessage: 'Merchandise items will be shipped to your address one week before the conference. Please ensure your shipping address in Step 1 is correct.',
+    soldOut: 'Sold Out', spotRemainingOne: '{count} spot remaining', spotRemainingOther: '{count} spots remaining',
+    conflictSelected: 'Conflicts with a selected session. Deselect this workshop to continue.', conflictUnavailable: 'Unavailable — conflicts with a selected session.',
+    select: 'Select', deselect: 'Deselect', selectAria: '{action} {name}. {status}',
+    size: 'Size:', selectSize: 'Select', sizeAria: '{name} size', selectSizeAria: 'Select {name} size', added: '✓ Added to order',
+    quantity: 'Qty:', quantityAria: '{name} quantity', decreaseQuantity: 'Decrease {name} quantity', increaseQuantity: 'Increase {name} quantity', max: 'max {max}',
+    categories: { workshop: 'Workshops', meal: 'Meal Packages', merchandise: 'Merchandise' },
+  },
+  review: {
+    title: 'Review Your Registration', attendee: 'Attendee Information', sessions: 'Selected Sessions', addons: 'Add-ons', pricing: 'Pricing Summary', grandTotal: 'Grand Total',
+    noSessions: 'No sessions selected.', noAddons: 'No add-ons selected.', fixErrors: 'Please fix the following errors before submitting', stepError: 'Step {step}: {message}',
+    fields: { fullName: 'Name', email: 'Email', phone: 'Phone', company: 'Company', jobTitle: 'Job Title', shippingAddress: 'Shipping Address', ticketType: 'Ticket Type' },
+    required: '— (required)', requiredForMerchandise: '— (required for merchandise)', empty: '—',
+  },
+  summary: { title: 'Order Summary', total: 'Total', empty: 'No items selected yet.', ticket: '{name} Ticket', merchandise: '{name} × {quantity}', workshopDiscount: 'Workshop discount (VIP 10%)' },
+  success: { title: 'Registration Complete!', confirmation: 'Confirmation #{id}', message: 'Thank you, {name}! Your {ticket} registration for {event} is confirmed.', email: 'You will receive a confirmation email at {email}.' },
+  validation: {
+    'attendee.fullName.required': 'Full name is required.', 'attendee.email.required': 'Email is required.', 'attendee.email.invalid': 'Enter a valid email address.',
+    'attendee.phone.required': 'Phone is required.', 'attendee.phone.invalid': 'Enter a valid phone number with 7 to 15 digits.', 'attendee.company.required': 'Company is required.', 'attendee.jobTitle.required': 'Job title is required.',
+    'attendee.shippingAddress.required': 'Shipping address is required when merchandise is selected.', 'ticket.required': 'Select a ticket type.', 'ticket.invalid': 'The selected ticket type is unavailable.',
+    'session.invalid': 'A selected session is unavailable.', 'session.soldOut': 'A selected session is sold out.', 'session.conflict': 'Selected sessions have overlapping times.', 'addon.invalid': 'A selected add-on is unavailable.', 'addon.quantity.invalid': 'The selected add-on quantity is invalid.', 'addon.soldOut': 'A selected workshop is sold out.', 'addon.workshopConflict': 'A selected workshop overlaps with a selected session.', 'addon.size.required': 'Select an available size for this merchandise item.',
+  },
+}

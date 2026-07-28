@@ -1,4 +1,7 @@
 <script setup>
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
 defineProps({
   title: {
     type: String,
@@ -42,7 +45,7 @@ defineEmits({
         dense
         no-caps
         type="button"
-        :label="`Edit → Step ${stepId}`"
+        :label="t('actions.editStep', { step: stepId })"
         @click="$emit('edit', stepId)"
       />
     </div>
