@@ -20,6 +20,11 @@
   color: var(--text-neutral-disabled);
 }
 
+/* Error cards receive focus after returning from Review; the error border is the single outer indicator. */
+.session-card--error:focus-within {
+  outline: none;
+}
+
 .session-card__top {
   display: flex;
   min-height: var(--line-height-subtitle1);
